@@ -11,20 +11,20 @@ Hand.prototype.sum = function() {
 	var normTotal = 0;
 	var aceHigh = 0;
 	var aceLow = 0;
-	var different = false
+	var acePresent = false
 	for (card in cards) {
 		if (card.rank > 10) {  //if card is jack, queen, king
 			normTotal += 10;  //total gets incremented by 10
 		}
 		else if (card.rank = 1) {
-			different = true;
+			acePresent = true;
 			aceHigh = normTotal + 11;
 			aceLow = normTotal + 1;
 			totals.push(aceLow);
 			totals.push(aceHigh);
 		}
 		else {
-			if (different) {
+			if (acePresent) {
 				aceHigh += card.rank;
 				aceLow += card.rank;
 				totals.push(aceLow);
