@@ -12,6 +12,15 @@ game.addPlayer('Judy', 33);
 game.addPlayer('Jamey', 81);
 game.addPlayer('Ingrid', 17);
 
+game.players[0].hands[0] = new Hand(game.deck);
+game.players[0].hands[0].addNewCard();
+game.players[0].hands[0].addNewCard();
+
+console.log(game.players[0].hands[0].cards);
+console.log(game.players[0].hands[0].sumTotal());
+game.players[0].placeBet(50);
+console.log(game.players[0].hands[0].bet);
+
 
 
 //var hand = new Hand();

@@ -1,8 +1,9 @@
 
 
-function Card(suit, rank) {
-  this.suit = suit;
+function Card(rank, suit) {
   this.rank = rank;
+  this.suit = suit;
+  
 }
 
 Card.prototype.suits = ["spades", "clubs", "hearts", "diamonds"];

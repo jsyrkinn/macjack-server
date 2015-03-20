@@ -7,49 +7,46 @@ function Hand(deck) {
   console.log("created a hand")
   this.deck = deck;
   this.cards = [];
-  this.bet = null; //TODO: set bet default
+  this.bet = 0; 
+}
+
+Hand.prototype.betMoney = function (player,money) {
+    this.bet = money;
+    player.totalMoney -= money;
 }
 
 Hand.prototype.addNewCard = function() {
   this.cards.push(this.deck.dealCard()); //adding card that was dealt from deck to hand
 }
 
-
-
-//code for the sum of a hand - not tested yet
-/*
-Hand.prototype.sum = function() {
+Hand.prototype.sumTotal = function() {
     var totals = [];
+    totals[0] = 0;
     var normTotal = 0;
     var aceHigh = 0;
     var aceLow = 0;
-    var acePresent = false
-    for (card in cards) {
-        if (card.rank > 10) {  //if card is jack, queen, king
-            normTotal += 10;  //total gets incremented by 10
-        }
-        else if (card.rank = 1) {
-            acePresent = true;
-            aceHigh = normTotal + 11;
-            aceLow = normTotal + 1;
-            totals.push(aceLow);
-            totals.push(aceHigh);
-        }
-        else {
-            if (acePresent) {
-                aceHigh += card.rank;
-                aceLow += card.rank;
-                totals.push(aceLow);
-                totals.push(aceHigh);
+
+    for (var i = 0; i <  this.cards.length; i++ ) {
+        var card = this.cards[i];
+        var totLength = totals.length;
+        for(var b = 0; b < totLength; b++){
+
+            if (card.rank != 1 && card.rank <= 10) {
+                totals[b] += card.rank;
             }
+
+            else if (card.rank > 10){
+                totals[b] += 10;
+            }
+
             else {
-            normTotal += card.rank
-            totals.push(total)
+                totals.push(totals[b] + 11);
+                totals[b]+=1;
             }
         }
     }
     return totals
 }
-*/
+
 
 module.exports = Hand;

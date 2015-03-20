@@ -7,7 +7,8 @@ function Deck() {
 	this.cards = []; 
 	for (suit in Card.prototype.suits) {
   		for (rank in Card.prototype.ranks) {
-    		this.cards.push(new Card(rank, suit));
+    		this.cards.push(new Card(Card.prototype.ranks[rank], Card.prototype.suits[suit]));
+        console.log(this.cards);
   		}
 	}
 }
