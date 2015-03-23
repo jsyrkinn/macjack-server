@@ -13,6 +13,8 @@ function Player(userName, id) {
 Player.prototype.placeBet = function(amountBet) {
   this.hands[0].betMoney(this,amountBet);
 }
+
+
 //this needs to be moved to the controller...
 Player.prototype.takeTurn = function() {
   //This function should loop through hands array
@@ -21,6 +23,7 @@ Player.prototype.takeTurn = function() {
     //if (yes){
       //hand.drawCard (or whatever the hell this function is.)
     //}
+    //endturn somehow
   }
 }
 

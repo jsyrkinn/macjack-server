@@ -10,7 +10,7 @@ function Hand(deck) {
   this.bet = 0; 
 }
 
-Hand.prototype.betMoney = function (player,money) {
+Hand.prototype.betMoney = function (player, money) {
     this.bet = money;
     player.totalMoney -= money;
 }

@@ -22,10 +22,6 @@ game.players[0].placeBet(50);
 console.log(game.players[0].hands[0].bet);
 
 
-
-//var hand = new Hand();
-//var deck = new Deck();
-
 var server = require('http').createServer();
 var io = require('socket.io')(server);
 
