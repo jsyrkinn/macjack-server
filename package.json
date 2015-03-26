@@ -3,5 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "socket.io": "~1.2.1",
+    "express": "~4.12.3",
+    "mongoose": "~4.0.0"
   }
 }
