@@ -23,7 +23,6 @@ console.log(game.players[0].hands[0].bet);
 
 
 var server = require('http').createServer();
-var io = require('socket.io')(server);
 
 
 
