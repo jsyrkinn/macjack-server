@@ -1,26 +1,15 @@
 
+var Card = require(./mon)
 
-//var Card = require('./card');
-var Player = require('./player');
-var Deck = require('./deck');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
 
-function Game() {
-  this.players = [];
-  this.id = null; //TODO: initialize id
-  this.deck = new Deck();
+var db = mongoose.connection:
 
-}
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function(callback) {
 
-//create function addPlayer(), dropPlayer(), 
-Game.prototype.addPlayer = function(userName, id) {
-  player = new Player(userName, id);
-  this.players.push(player);
-  console.log(player);
-}
+  gameSchema = mongoose.Schema({
 
-Game.prototype.getCurrentPlayer = function() {
-   //This function should return the player whose turn it is
-}
-
-
-module.exports = Game;
+  });
+});
