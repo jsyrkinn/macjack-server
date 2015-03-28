@@ -4,10 +4,8 @@ var Deck = require('./deck');
 
 
 function Hand(deck) {
-  console.log("created a hand")
-  this.deck = deck;
   this.cards = [];
-  this.bet = 0; 
+  this.bet = 0;
 }
 
 Hand.prototype.betMoney = function (player, money) {

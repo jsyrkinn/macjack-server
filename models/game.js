@@ -1,15 +1,15 @@
 
-var Card = require(./mon)
+var Card = require('./card');
+var Player = require('./player');
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+function Game(id) {
+  this.gameID = id;
+  this.players = {};
+  this.deck = [];
+  this.joinQueue = [];
+  this.dealersCards = [];
+  this.currentPlayer = '';
+  this.currentPlayerHand = 0;
+}
 
-var db = mongoose.connection:
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function(callback) {
-
-  gameSchema = mongoose.Schema({
-
-  });
-});
+modules.exports = Game;
