@@ -2,7 +2,7 @@
 var Hand = require('./hand');
 var Card = require('.card');
 
-function Player(playerID, playerName) {
+function Player(playerName) {
   this.hands = [];
   this.active = true;
   this.totalMoney = 500;

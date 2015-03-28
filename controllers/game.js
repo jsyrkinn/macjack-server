@@ -9,26 +9,35 @@ drawCard = function(game) {
   }
 }
 
-dealCard = function(game, playerID, hand) {
+dealCard = function(game, playerName, hand) {
   for(player in game.players) {
-    if(playerID == player.playerID) {
+    if(playerName == player.playerName) {
       player.hands[hand].cards.push(drawCard(game));
     }
 }
 
-addPlayer = function(game, playerID, playerName) {
-  game.joinQueue.push(new Player(playerID, playerName));
+addPlayer = function(game, playerName) {
+  game.joinQueue.push(new Player(playerName));
 }
 
-initalize = function(game, foundingPlayerID, foundingPlayerName) {
+initalize = function(game, foundingPlayerName) {
   for (suit in ['Spades', 'Clubs', 'Hearts', 'Diamonds']) {
       for (rank in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) {
         game.deck.push(new Card(rank, suit));
       }
   }
-  addPlayer(game, foundingPlayerID, foundingPlayerName);
-  game.currentPlayer = foundingPlayerID;
+  addPlayer(game, foundingPlayerID, nameDict);
+  game.currentPlayer = foundingPlayerName;
   game.dealersCards.push(drawCard(game));
+}
+
+hasPlayer = function(game, playerName) {
+  for(player in game.players) {
+    if(playerName == player.playerName) {
+      return true;
+    }
+  }
+  return false;
 }
 
 exports.dealCard = dealCard;
