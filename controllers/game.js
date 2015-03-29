@@ -26,7 +26,7 @@ initalize = function(game, foundingPlayerName) {
         game.deck.push(new Card(rank, suit));
       }
   }
-  addPlayer(game, foundingPlayerID, nameDict);
+  addPlayer(game, foundingPlayerID);
   game.currentPlayer = foundingPlayerName;
   game.dealersCards.push(drawCard(game));
 }
