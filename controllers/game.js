@@ -14,6 +14,7 @@ dealCard = function(game, playerName, hand) {
     if(playerName == player.playerName) {
       player.hands[hand].cards.push(drawCard(game));
     }
+  }
 }
 
 addPlayer = function(game, playerName) {
