@@ -3,7 +3,7 @@ var Card = require('./card');
 var Player = require('./player');
 
 function Game() {
-  this.players = {};
+  this.players = [];
   this.deck = [];
   this.joinQueue = [];
   this.dealersCards = [];
