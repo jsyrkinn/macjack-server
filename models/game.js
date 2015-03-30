@@ -11,4 +11,4 @@ function Game() {
   this.currentPlayerHand = 0;
 }
 
-modules.exports = Game;
+module.exports = Game;
