@@ -42,5 +42,5 @@ hasPlayer = function(game, playerName) {
 }
 
 exports.dealCard = dealCard;
-exports.initalize = initalize;
+exports.initialize = initialize;
 exports.addPlayer = addPlayer;
