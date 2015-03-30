@@ -1,5 +1,6 @@
 
 var Player = require('../models/player');
+var Card = require('../models/card');
 
 drawCard = function(game) {
   var deck = game.deck
@@ -27,7 +28,7 @@ initialize = function(game, foundingPlayerName) {
         game.deck.push(new Card(rank, suit));
       }
   }
-  addPlayer(game, foundingPlayerID);
+  addPlayer(game, foundingPlayerName);
   game.currentPlayer = foundingPlayerName;
   game.dealersCards.push(drawCard(game));
 }
@@ -44,3 +45,4 @@ hasPlayer = function(game, playerName) {
 exports.dealCard = dealCard;
 exports.initialize = initialize;
 exports.addPlayer = addPlayer;
+exports.hasPlayer = hasPlayer;
