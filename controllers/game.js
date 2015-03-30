@@ -21,7 +21,7 @@ addPlayer = function(game, playerName) {
   game.joinQueue.push(new Player(playerName));
 }
 
-initalize = function(game, foundingPlayerName) {
+initialize = function(game, foundingPlayerName) {
   for (suit in ['Spades', 'Clubs', 'Hearts', 'Diamonds']) {
       for (rank in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) {
         game.deck.push(new Card(rank, suit));
