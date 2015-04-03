@@ -3,7 +3,6 @@ var server = require('http').createServer();
 var express = require('express');
 var Game = require('./models/game');
 var controller = require('./controllers/game');
-require('mootools');
 
 var app = express();
 
@@ -31,8 +30,7 @@ app.get('/games/:gameid/state.json', function(req, res) {
     game = games[gameID];
     if(req.query.playerid in playerDict) {
       if(controller.hasPlayer(game, playerDict[req.query.playerid])) {
-        console.log(JSON.stringify(game.players[0]));
-        res.send(JSON.stringify(game));
+        res.json(game);
       } else {
         res.status(404).send("Player not in game");
       }
