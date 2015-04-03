@@ -2,7 +2,7 @@
 var Card = require('./card');
 
 
-function Hand(deck) {
+function Hand() {
   this.cards = [];
   this.bet = 0;
 }
