@@ -7,16 +7,16 @@ var controller = require('./controllers/game');
 var app = express();
 
 games = {};
-playerDict = {};
+userDict = {};
 
 // TEST
 
-playerDict[1] = 'Evan';
-playerDict[2] = 'Judy';
+userDict[1] = 'Evan';
+userDict[2] = 'Judy';
 
 testgame = new Game();
-controller.initialize(testgame, 'Evan');
-controller.addPlayer(testgame, 'Judy');
+controller.initialize(testgame);
+controller.addPlayer(testgame, 'Evan', 'Evan');
 controller.addQueuedPlayers(testgame);
 
 
@@ -28,8 +28,8 @@ app.get('/games/:gameid/state.json', function(req, res) {
   gameID = req.params.gameid;
   if(gameID in games) {
     game = games[gameID];
-    if(req.query.playerid in playerDict) {
-      if(controller.hasPlayer(game, playerDict[req.query.playerid])) {
+    if(req.query.playerid in userDict) {
+      if(controller.hasPlayer(game, userDict[req.query.playerid])) {
         res.json(game);
       } else {
         res.status(404).send("Player not in game");
