@@ -1,6 +1,7 @@
 
 var Player = require('../models/player');
 var Card = require('../models/card');
+var Hand = require('../models/hand');
 
 drawCard = function(game) {
   var deck = game.deck
@@ -23,24 +24,33 @@ addPlayer = function(game, userName, playerName) {
 }
 
 addQueuedPlayers = function(game) {
-  game.joinQueue.forEach( function(player){
+  game.joinQueue.forEach(function(player){
     game.players.push(player);
   })
   game.joinQueue = [];
 }
 
-initialize = function(game) {
+startNewRound = function(game) {
+  game.moveNumber = 0;
+  game.deck = [];
   ['Spades', 'Clubs', 'Hearts', 'Diamonds'].forEach(function(suit) {
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].forEach(function(rank) {
         game.deck.push(new Card(rank, suit));
       });
   });
+  addQueuedPlayers(game);
+  game.players.forEach(function(player) {
+    player.hands = [new Hand()];
+  })
+  game.currentPlayer = game.players[0].userName;
+  game.currentPlayerHand = 0;
+  game.dealersCards = [];
   game.dealersCards.push(drawCard(game));
 }
 
 hasPlayer = function(game, userName) {
   inGame = false;
-  game.players.forEach( function(player) {
+  game.players.forEach(function(player) {
     if(userName == player.userName) {
       inGame = true;
     }
@@ -49,7 +59,7 @@ hasPlayer = function(game, userName) {
 }
 
 exports.dealCard = dealCard;
-exports.initialize = initialize;
+exports.startNewRound = startNewRound;
 exports.addPlayer = addPlayer;
 exports.hasPlayer = hasPlayer;
 exports.addQueuedPlayers = addQueuedPlayers;

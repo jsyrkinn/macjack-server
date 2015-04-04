@@ -15,9 +15,8 @@ userDict[1] = 'Evan';
 userDict[2] = 'Judy';
 
 testgame = new Game();
-controller.initialize(testgame);
 controller.addPlayer(testgame, 'Evan', 'Evan');
-controller.addQueuedPlayers(testgame);
+controller.startNewRound(testgame);
 
 
 games[1] = testgame;
