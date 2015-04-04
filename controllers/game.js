@@ -10,16 +10,16 @@ drawCard = function(game) {
   }
 }
 
-dealCard = function(game, playerName, hand) {
+dealCard = function(game, userName, hand) {
   for(player in game.players) {
-    if(playerName == player.playerName) {
+    if(userName == player.userName) {
       player.hands[hand].cards.push(drawCard(game));
     }
   }
 }
 
-addPlayer = function(game, playerName) {
-  game.joinQueue.push(new Player(playerName));
+addPlayer = function(game, userName, playerName) {
+  game.joinQueue.push(new Player(userName, playerName));
 }
 
 addQueuedPlayers = function(game) {
@@ -29,22 +29,19 @@ addQueuedPlayers = function(game) {
   game.joinQueue = [];
 }
 
-initialize = function(game, foundingPlayerName) {
+initialize = function(game) {
   ['Spades', 'Clubs', 'Hearts', 'Diamonds'].forEach(function(suit) {
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].forEach(function(rank) {
         game.deck.push(new Card(rank, suit));
       });
   });
-  addPlayer(game, foundingPlayerName);
-  addQueuedPlayers(game);
-  game.currentPlayer = foundingPlayerName;
   game.dealersCards.push(drawCard(game));
 }
 
-hasPlayer = function(game, playerName) {
+hasPlayer = function(game, userName) {
   inGame = false;
   game.players.forEach( function(player) {
-    if(playerName == player.playerName) {
+    if(userName == player.userName) {
       inGame = true;
     }
   })
