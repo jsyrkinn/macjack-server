@@ -12,11 +12,11 @@ drawCard = function(game) {
 }
 
 dealCard = function(game, userName, hand) {
-  for(player in game.players) {
+  game.players.forEach(function(player) {
     if(userName == player.userName) {
       player.hands[hand].cards.push(drawCard(game));
     }
-  }
+  });
 }
 
 addPlayer = function(game, userName, playerName) {
