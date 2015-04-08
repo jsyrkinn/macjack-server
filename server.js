@@ -10,8 +10,8 @@ authDict = {};
 
 // TEST
 
-userDict[1] = 'Evan';
-userDict[2] = 'Judy';
+authDict[1] = 'Evan';
+authDict[2] = 'Judy';
 
 testgame = new Game();
 controller.addPlayer(testgame, 'Evan', 'Evan');
