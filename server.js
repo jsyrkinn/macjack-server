@@ -1,5 +1,4 @@
 
-var server = require('http').createServer();
 var express = require('express');
 var Game = require('./models/game');
 var controller = require('./controllers/game');
