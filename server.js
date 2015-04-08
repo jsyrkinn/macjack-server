@@ -7,7 +7,7 @@ var controller = require('./controllers/game');
 var app = express();
 
 games = {};
-userDict = {};
+authDict = {};
 
 // TEST
 
@@ -28,7 +28,7 @@ app.get('/games/:gameid/state.json', function(req, res) {
   if(gameID in games) {
     game = games[gameID];
     if(req.query.playerid in userDict) {
-      if(controller.hasPlayer(game, userDict[req.query.playerid])) {
+      if(controller.hasPlayer(game, authDict[req.query.playerid])) {
         res.json(game);
       } else {
         res.status(404).send("Player not in game");
