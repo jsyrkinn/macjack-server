@@ -11,16 +11,16 @@ drawCard = function(game) {
   }
 }
 
-dealCard = function(game, userName, hand) {
+dealCard = function(game, playerID, hand) {
   game.players.forEach(function(player) {
-    if(userName == player.userName) {
+    if(playerID == player.playerID) {
       player.hands[hand].cards.push(drawCard(game));
     }
   });
 }
 
-addPlayer = function(game, userName, playerName) {
-  game.joinQueue.push(new Player(userName, playerName));
+addPlayer = function(game, playerID, playerName) {
+  game.joinQueue.push(new Player(playerID, playerName));
 }
 
 addQueuedPlayers = function(game) {
@@ -42,16 +42,16 @@ startNewRound = function(game) {
   game.players.forEach(function(player) {
     player.hands = [new Hand()];
   })
-  game.currentPlayer = game.players[0].userName;
+  game.currentPlayer = game.players[0].playerID;
   game.currentPlayerHand = 0;
   game.dealersCards = [];
   game.dealersCards.push(drawCard(game));
 }
 
-hasPlayer = function(game, userName) {
+hasPlayer = function(game, playerID) {
   inGame = false;
   game.players.forEach(function(player) {
-    if(userName == player.userName) {
+    if(playerID == player.playerID) {
       inGame = true;
     }
   })
