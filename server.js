@@ -26,8 +26,9 @@ app.get('/games/:gameid/state.json', function(req, res) {
   gameID = req.params.gameid;
   if(gameID in games) {
     game = games[gameID];
-    if(req.query.playerid in userDict) {
-      if(controller.hasPlayer(game, authDict[req.query.playerid])) {
+    auth = req.get('X-auth-code');
+    if(auth in authDict) {
+      if(controller.hasPlayer(game, authDict[auth])) {
         res.json(game);
       } else {
         res.status(404).send("Player not in game");
