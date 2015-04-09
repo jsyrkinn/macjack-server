@@ -41,7 +41,7 @@ app.use(function(req, res, next) {
   next();
 })
 
-app.get('/signup.json', function(req, res) {
+app.post('/signup.json', function(req, res) {
   name = req.query.name;
   do {
     var potentialCode = crypto.randomBytes(64).toString('hex');
