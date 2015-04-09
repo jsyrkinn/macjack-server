@@ -22,11 +22,18 @@ games[1] = testgame;
 
 //
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-auth-code");
+  next();
+})
+
 app.get('/games/:gameid/state.json', function(req, res) {
   gameID = req.params.gameid;
   if(gameID in games) {
     game = games[gameID];
     auth = req.get('X-auth-code');
+    console.log(auth);
     if(auth in authDict) {
       if(controller.hasPlayer(game, authDict[auth])) {
         res.json(game);
