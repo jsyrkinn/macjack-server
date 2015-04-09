@@ -49,7 +49,7 @@ app.post('/signup.json', function(req, res) {
   do {
     var potentialID = crypto.randomBytes(10).toString('hex');
   } while (!hasID(authDict, potentialID));
-  authDict[potentialCode] = {playerID: potentialID, playerName: name);
+  authDict[potentialCode] = {playerID: potentialID, playerName: name};
   res.json({auth: potentialCode, playerID: potentialID}); // response to client
 });
 
@@ -57,6 +57,10 @@ app.get('/games/:gameid/state.json', function(req, res) {
   gameID = req.params.gameid;
   if(gameID in games) {
     game = games[gameID];
+    if(req.params.movenumber == game.moveNumber) {
+      res.status(400).send("Client up to date");
+      return;
+    }
     auth = req.get('X-Auth-Code');
     console.log(auth);
     if(auth in authDict) {
