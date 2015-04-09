@@ -49,8 +49,7 @@ app.get('/signup.json', function(req, res) {
   do {
     var potentialID = crypto.randomBytes(10).toString('hex');
   } while (!hasID(authDict, potentialID));
-  authDict[potentialCode] = potentialID;
-
+  authDict[potentialCode] = {playerID: potentialID, playerName: name);
 });
 
 app.get('/games/:gameid/state.json', function(req, res) {
