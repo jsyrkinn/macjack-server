@@ -36,10 +36,10 @@ app.post('/signup.json', function(req, res) {
   name = req.query.name;
   do {
     var potentialCode = crypto.randomBytes(64).toString('hex');
-  } while (!authDict.hasOwnProperty(potentialCode));
+  } while (authDict.hasOwnProperty(potentialCode));
   do {
     var potentialID = crypto.randomBytes(10).toString('hex');
-  } while (!utils.hasID(authDict, potentialID));
+  } while (utils.hasID(authDict, potentialID));
   authDict[potentialCode] = new User(potentialID, name);
   res.json({auth: potentialCode, playerID: potentialID}); // response to client
 });
@@ -77,6 +77,8 @@ app.post('/games/newgame.json', function(req, res) {
     controller.addPlayer(game, user);
     controller.startNewRound(game);
     res.status(200).json({gameID: gameCode});
+  } else {
+    res.status(404).send("Bad auth");
   }
 });
 
