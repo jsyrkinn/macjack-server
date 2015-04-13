@@ -44,8 +44,8 @@ startNewRound = function(game) {
   })
   game.currentPlayer = game.players[0].playerID;
   game.currentPlayerHand = 0;
-  game.dealersCards = [];
-  game.dealersCards.push(drawCard(game));
+  game.dealerCards = [];
+  game.dealerCards.push(drawCard(game));
 }
 
 hasPlayer = function(game, playerID) {

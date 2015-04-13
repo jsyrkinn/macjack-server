@@ -6,7 +6,7 @@ function Game() {
   this.players = [];
   this.deck = [];
   this.joinQueue = [];
-  this.dealersCards = [];
+  this.dealerCards = [];
   this.moveNumber = 0;
   this.currentPlayer = '';
   this.currentPlayerHand = 0;
