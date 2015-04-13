@@ -1,7 +1,7 @@
 
 var express = require('express');
 var Game = require('./models/game');
-var User = require('.models/user');
+var User = require('./models/user');
 var controller = require('./controllers/game');
 var crypto = require('crypto');
 
@@ -23,8 +23,8 @@ function hasID(authDict, playerID) {
 
 // TEST
 
-authDict[1] = {playerID: 1, playerName: 'Evan'};
-authDict[2] = {playerID: 2, playerName: 'Judy'};
+authDict[1] = new User(1, 'Evan');
+authDict[2] = new User(2, 'Judy');
 
 testgame = new Game();
 controller.addPlayer(testgame, 1);
