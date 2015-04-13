@@ -19,9 +19,22 @@ dealCard = function(game, playerID, hand) {
   });
 }
 
+syncMoney = function(user, player) {
+  if(user.playerID != player.playerID) {
+    console.log("syncMoney: user player mismatch");
+  } else {
+    player.totalMoney = user.money;
+  }
+}
+
 addPlayer = function(game, user) {
   player = new Player(user.playerID, user.playerName);
-  game.joinQueue.push(player);
+  syncMoney(user, player);
+  if(game.moveNumber == 0) {
+    game.players.push(player);
+  } else {
+    game.joinQueue.push(player);
+  }
 }
 
 addQueuedPlayers = function(game) {
