@@ -1,4 +1,6 @@
 
+var crypto = require('crypto');
+
 exports.hasID = function(authDict, playerID) {
   for (var code in authDict) {
     if(authDict.hasOwnProperty(code)) {
@@ -8,4 +10,12 @@ exports.hasID = function(authDict, playerID) {
     }
   }
   return false;
+}
+
+exports.newGame = function(games) {
+  do {
+    var code = crypto.randomBytes(4).toString('hex');
+  } while (!games.hasOwnProperty(code));
+  games[code] = new Game();
+  return code;
 }

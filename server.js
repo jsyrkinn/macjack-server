@@ -72,8 +72,11 @@ app.post('/games/newgame.json', function(req, res) {
   auth = req.get('X-Auth-Code');
   if(auth in authDict) {
     user = authDict[auth];
-    gameID = utils.newGame(games);
-    game = games[gameID];
+    gameCode = utils.newGame(games);
+    game = games[gameCode];
+    controller.addPlayer(game, user);
+    controller.startNewRound(game);
+    res.status(200).json({gameID: gameCode});
   }
 });
 
