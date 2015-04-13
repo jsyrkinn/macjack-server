@@ -1,5 +1,6 @@
 
 var crypto = require('crypto');
+var Game = require('../models/game')
 
 exports.hasID = function(authDict, playerID) {
   for (var code in authDict) {
@@ -14,8 +15,8 @@ exports.hasID = function(authDict, playerID) {
 
 exports.newGame = function(games) {
   do {
-    var code = crypto.randomBytes(4).toString('hex');
-  } while (!games.hasOwnProperty(code));
+    var code = crypto.randomBytes(2).toString('hex');
+  } while (games.hasOwnProperty(code));
   games[code] = new Game();
   return code;
 }

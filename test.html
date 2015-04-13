@@ -4,7 +4,27 @@
     <script>
       var myip = '141.140.195.232';
       testRequest = new XMLHttpRequest();
-      testRequest.open( "GET", 'http://' + myip + ':1337/games/1/state.json?movenumber=0', true );
+      testRequest.open( "GET", 'http://localhost:1337/games/1/state.json?movenumber=0', true );
+      testRequest.setRequestHeader('X-Auth-Code', 1);
+      testRequest.onload = function() {
+        if (this.status >= 200 && this.status < 400) {
+          // Success!
+          console.log(JSON.parse(this.response));
+        } else {
+          // We reached our target server, but it returned an error
+
+        }
+      };
+
+      testRequest.onerror = function() {
+        console.log('Connection Failed');
+      };
+      //testRequest.send();
+
+      //-----------
+
+      testRequest = new XMLHttpRequest();
+      testRequest.open( "POST", 'http://localhost:1337/games/newgame.json', true );
       testRequest.setRequestHeader('X-Auth-Code', 1);
       testRequest.onload = function() {
         if (this.status >= 200 && this.status < 400) {
