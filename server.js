@@ -3,23 +3,13 @@ var express = require('express');
 var Game = require('./models/game');
 var User = require('./models/user');
 var controller = require('./controllers/game');
+var utils = require('./controllers/utils');
 var crypto = require('crypto');
 
 var app = express();
 
 games = {};
 authDict = {};
-
-function hasID(authDict, playerID) {
-  for (var code in authDict) {
-    if(authDict.hasOwnProperty(code)) {
-      if(authDict[code].playerID == playerID) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
 
 // TEST
 
@@ -49,7 +39,7 @@ app.post('/signup.json', function(req, res) {
   } while (!authDict.hasOwnProperty(potentialCode));
   do {
     var potentialID = crypto.randomBytes(10).toString('hex');
-  } while (!hasID(authDict, potentialID));
+  } while (!utils.hasID(authDict, potentialID));
   authDict[potentialCode] = new User(potentialID, name);
   res.json({auth: potentialCode, playerID: potentialID}); // response to client
 });
@@ -76,6 +66,10 @@ app.get('/games/:gameid/state.json', function(req, res) {
   } else {
     res.status(404).send("Game not found");
   }
+});
+
+app.post('/games/newgame.json', function(req, res) {
+
 });
 
 app.listen(1337);
