@@ -1,8 +1,9 @@
 
 var express = require('express');
 var Game = require('./models/game');
+var User = require('.models/user');
 var controller = require('./controllers/game');
-var crypto = require('crypto')
+var crypto = require('crypto');
 
 var app = express();
 
