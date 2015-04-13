@@ -38,7 +38,6 @@ app.get('/games/:gameid/state.json', function(req, res) {
       return;
     }
     auth = req.get('X-Auth-Code');
-    console.log(auth);
     if(auth in authDict) {
       if(controller.hasPlayer(game, authDict[auth].playerID)) {
         res.json(game);
