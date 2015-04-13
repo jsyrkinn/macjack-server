@@ -2,34 +2,14 @@
 <html>
   <head>
     <script>
-      var myip = '141.140.195.232';
       testRequest = new XMLHttpRequest();
-      testRequest.open( "GET", 'http://localhost:1337/games/1/state.json?movenumber=0', true );
-      testRequest.setRequestHeader('X-Auth-Code', 1);
+      testRequest.open( "POST", 'http://localhost:1337/signup.json?name=Evan', true );
       testRequest.onload = function() {
         if (this.status >= 200 && this.status < 400) {
           // Success!
-          console.log(JSON.parse(this.response));
-        } else {
-          // We reached our target server, but it returned an error
-
-        }
-      };
-
-      testRequest.onerror = function() {
-        console.log('Connection Failed');
-      };
-      //testRequest.send();
-
-      //-----------
-
-      testRequest = new XMLHttpRequest();
-      testRequest.open( "POST", 'http://localhost:1337/games/newgame.json', true );
-      testRequest.setRequestHeader('X-Auth-Code', 1);
-      testRequest.onload = function() {
-        if (this.status >= 200 && this.status < 400) {
-          // Success!
-          console.log(JSON.parse(this.response));
+          userData = JSON.parse(this.response);
+          console.log(userData);
+          newGame(userData);
         } else {
           // We reached our target server, but it returned an error
 
@@ -40,6 +20,49 @@
         console.log('Connection Failed');
       };
       testRequest.send();
+
+      function newGame(userData) {
+        testRequest = new XMLHttpRequest();
+        testRequest.open( "POST", 'http://localhost:1337/games/newgame.json', true );
+        testRequest.setRequestHeader('X-Auth-Code', userData.auth);
+        testRequest.onload = function() {
+          if (this.status >= 200 && this.status < 400) {
+            // Success!
+            gameInfo = JSON.parse(this.response);
+            console.log(gameInfo);
+            state(gameInfo);
+          } else {
+            // We reached our target server, but it returned an error
+
+          }
+        };
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+
+      function state(gameData) {
+        testRequest = new XMLHttpRequest();
+        testRequest.open( "GET", 'http://localhost:1337/games/'+ gameData.gameID + '/state.json?movenumber=0', true );
+        testRequest.setRequestHeader('X-Auth-Code', userData.auth);
+        testRequest.onload = function() {
+          if (this.status >= 200 && this.status < 400) {
+            // Success!
+            gameState = JSON.parse(this.response);
+            console.log(gameState);
+          } else {
+            // We reached our target server, but it returned an error
+
+          }
+        };
+
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+      //-----------
     </script>
   </head>
 </html>

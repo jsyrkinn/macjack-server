@@ -11,21 +11,6 @@ var app = express();
 games = {};
 authDict = {};
 
-// TEST
-
-authDict[1] = new User(1, 'Evan');
-authDict[2] = new User(2, 'Judy');
-
-testgame = new Game();
-controller.addPlayer(testgame, authDict[1]);
-controller.startNewRound(testgame);
-
-
-games[1] = testgame;
-
-//
-
-
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-auth-code");
@@ -35,10 +20,10 @@ app.use(function(req, res, next) {
 app.post('/signup.json', function(req, res) {
   name = req.query.name;
   do {
-    var potentialCode = crypto.randomBytes(64).toString('hex');
+    var potentialCode = crypto.randomBytes(32).toString('hex');
   } while (authDict.hasOwnProperty(potentialCode));
   do {
-    var potentialID = crypto.randomBytes(10).toString('hex');
+    var potentialID = crypto.randomBytes(8).toString('hex');
   } while (utils.hasID(authDict, potentialID));
   authDict[potentialCode] = new User(potentialID, name);
   res.json({auth: potentialCode, playerID: potentialID}); // response to client
