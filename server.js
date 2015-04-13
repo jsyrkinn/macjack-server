@@ -17,7 +17,7 @@ authDict[1] = new User(1, 'Evan');
 authDict[2] = new User(2, 'Judy');
 
 testgame = new Game();
-controller.addPlayer(testgame, 1);
+controller.addPlayer(testgame, authDict[1]);
 controller.startNewRound(testgame);
 
 
@@ -69,7 +69,12 @@ app.get('/games/:gameid/state.json', function(req, res) {
 });
 
 app.post('/games/newgame.json', function(req, res) {
-
+  auth = req.get('X-Auth-Code');
+  if(auth in authDict) {
+    user = authDict[auth];
+    gameID = utils.newGame(games);
+    game = games[gameID];
+  }
 });
 
 app.listen(1337);

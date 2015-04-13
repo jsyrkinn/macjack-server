@@ -19,8 +19,9 @@ dealCard = function(game, playerID, hand) {
   });
 }
 
-addPlayer = function(game, playerID, playerName) {
-  game.joinQueue.push(new Player(playerID, playerName));
+addPlayer = function(game, user) {
+  player = new Player(user.playerID, user.playerName);
+  game.joinQueue.push(player);
 }
 
 addQueuedPlayers = function(game) {
