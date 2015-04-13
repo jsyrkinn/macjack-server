@@ -50,7 +50,7 @@ app.post('/signup.json', function(req, res) {
   do {
     var potentialID = crypto.randomBytes(10).toString('hex');
   } while (!hasID(authDict, potentialID));
-  authDict[potentialCode] = {playerID: potentialID, playerName: name};
+  authDict[potentialCode] = new User(potentialID, name);
   res.json({auth: potentialCode, playerID: potentialID}); // response to client
 });
 
