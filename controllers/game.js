@@ -57,7 +57,7 @@ startNewRound = function(game) {
   game.players.forEach(function(player) {
     player.hands = [new Hand()];
   })
-  game.currentPlayer = game.players[0].playerID;
+  game.currentPlayer = 0;
   game.currentPlayerHand = 0;
   game.dealerCards = [];
   game.dealerCards.push(drawCard(game));
