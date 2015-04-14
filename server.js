@@ -66,4 +66,21 @@ app.post('/games/newgame.json', function(req, res) {
   }
 });
 
+app.post('/games/:gameid/join.json', function(req, res) {
+  gameID = req.params.gameid;
+  if(gameID in games) {
+    game = games[gameID];
+    auth = req.get('X-Auth-Code');
+    if(auth in authDict) {
+      user = authDict[auth];
+      if(!user.inGame) {
+        controller.addPlayer(game, user);
+        res.status(200).send();
+      }
+    }
+  } else {
+    res.status(404).send("Game not found");
+  }
+});
+
 app.listen(1337);

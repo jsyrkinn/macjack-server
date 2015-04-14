@@ -28,14 +28,55 @@
         testRequest.onload = function() {
           if (this.status >= 200 && this.status < 400) {
             // Success!
-            gameInfo = JSON.parse(this.response);
-            console.log(gameInfo);
-            state(gameInfo);
+            gameData = JSON.parse(this.response);
+            console.log(gameData);
+            newUserJudy(gameData);
           } else {
             // We reached our target server, but it returned an error
 
           }
         };
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+
+      function newUserJudy(gameData) {
+        testRequest = new XMLHttpRequest();
+        testRequest.open( "POST", 'http://localhost:1337/signup.json?name=Judy', true );
+        testRequest.onload = function() {
+          if (this.status >= 200 && this.status < 400) {
+            // Success!
+            userData = JSON.parse(this.response);
+            console.log(userData);
+            join(userData, gameData);
+          } else {
+            // We reached our target server, but it returned an error
+
+          }
+        };
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+
+      function join(userData, gameData) {
+        testRequest = new XMLHttpRequest();
+        testRequest.open( "POST", 'http://localhost:1337/games/'+ gameData.gameID + '/join.json', true );
+        testRequest.setRequestHeader('X-Auth-Code', userData.auth);
+        testRequest.onload = function() {
+          if (this.status >= 200 && this.status < 400) {
+            // Success!
+            console.log("Success");
+            state(gameData);
+          } else {
+            // We reached our target server, but it returned an error
+
+          }
+        };
+
         testRequest.onerror = function() {
           console.log('Connection Failed');
         };

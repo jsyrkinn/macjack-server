@@ -28,6 +28,7 @@ syncMoney = function(user, player) {
 }
 
 addPlayer = function(game, user) {
+  user.inGame = true;
   player = new Player(user.playerID, user.playerName);
   syncMoney(user, player);
   if(game.moveNumber == 0) {
