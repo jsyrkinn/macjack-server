@@ -20,10 +20,10 @@ dealCard = function(game, playerID, hand) {
 }
 
 syncMoney = function(user, player) {
-  if(user.playerID != player.playerID) {
-    console.log("syncMoney: user player mismatch");
+  if(user.playerID == player.playerID) {
+    player.money = user.money;
   } else {
-    player.totalMoney = user.money;
+    console.log('syncMoney: mismatch');
   }
 }
 
@@ -63,14 +63,42 @@ startNewRound = function(game) {
   game.dealerCards.push(drawCard(game));
 }
 
-hasPlayer = function(game, playerID) {
+hasPlayer = function(game, user) {
   inGame = false;
   game.players.forEach(function(player) {
-    if(playerID == player.playerID) {
+    if(user.playerID == player.playerID) {
       inGame = true;
     }
   })
   return inGame;
+}
+
+isPlayerMove = function(game, user) {
+  return game.players[game.currentPlayer].playerID == user.playerID;
+}
+
+advanceMove = function(game) {
+  game.currentPlayerHand++
+  // TODO handle all players not active
+  while(
+      !game.players[game.currentPlayer].active ||
+      game.currentPlayerHand >= game.players[game.currentPlayer].hands.length
+    ) {
+    game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
+    game.currentPlayerHand = 0;
+  }
+}
+
+currentPlayerBet = function(game, user, amount) {
+  currentPlayer = game.players[game.currentPlayer];
+  if(user.money < amount || currentPlayer.playerID != user.playerID) {
+    return false;
+  }
+  user.money -= amount;
+  syncMoney(user, currentPlayer);
+  currentPlayer.hands[game.currentPlayerHand].bet = amount;
+  advanceMove(game);
+  return true;
 }
 
 exports.dealCard = dealCard;
@@ -78,3 +106,7 @@ exports.startNewRound = startNewRound;
 exports.addPlayer = addPlayer;
 exports.hasPlayer = hasPlayer;
 exports.addQueuedPlayers = addQueuedPlayers;
+exports.isPlayerMove = isPlayerMove;
+exports.advanceMove = advanceMove;
+exports.syncMoney = syncMoney;
+exports.currentPlayerBet = currentPlayerBet;

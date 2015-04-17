@@ -7,9 +7,9 @@
       testRequest.onload = function() {
         if (this.status >= 200 && this.status < 400) {
           // Success!
-          userData = JSON.parse(this.response);
-          console.log(userData);
-          newGame(userData);
+          evanData = JSON.parse(this.response);
+          console.log(evanData);
+          newGame(evanData);
         } else {
           // We reached our target server, but it returned an error
 
@@ -48,9 +48,9 @@
         testRequest.onload = function() {
           if (this.status >= 200 && this.status < 400) {
             // Success!
-            userData = JSON.parse(this.response);
-            console.log(userData);
-            join(userData, gameData);
+            judyData = JSON.parse(this.response);
+            console.log(judyData);
+            join(judyData, gameData);
           } else {
             // We reached our target server, but it returned an error
 
@@ -70,6 +70,27 @@
           if (this.status >= 200 && this.status < 400) {
             // Success!
             console.log("Success");
+            bet(gameData);
+          } else {
+            // We reached our target server, but it returned an error
+
+          }
+        };
+
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+
+      function bet(gameData) {
+        testRequest = new XMLHttpRequest();
+        testRequest.open( "POST", 'http://localhost:1337/games/'+ gameData.gameID + '/bet.json?amount=1500', true );
+        testRequest.setRequestHeader('X-Auth-Code', evanData.auth);
+        testRequest.onload = function() {
+          if (this.status >= 200 && this.status < 400) {
+            // Success!
+            console.log('Betted');
             state(gameData);
           } else {
             // We reached our target server, but it returned an error
@@ -86,7 +107,7 @@
       function state(gameData) {
         testRequest = new XMLHttpRequest();
         testRequest.open( "GET", 'http://localhost:1337/games/'+ gameData.gameID + '/state.json?movenumber=0', true );
-        testRequest.setRequestHeader('X-Auth-Code', userData.auth);
+        testRequest.setRequestHeader('X-Auth-Code', evanData.auth);
         testRequest.onload = function() {
           if (this.status >= 200 && this.status < 400) {
             // Success!
