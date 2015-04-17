@@ -8,7 +8,7 @@ function Game() {
   this.joinQueue = [];
   this.dealerCards = [];
   this.moveNumber = 0;
-  this.currentPlayer = '';
+  this.currentPlayer = 0;
   this.currentPlayerHand = 0;
 }
 
