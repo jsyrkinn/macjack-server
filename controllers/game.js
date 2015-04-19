@@ -11,12 +11,8 @@ drawCard = function(game) {
   }
 }
 
-dealCard = function(game, playerID, hand) {
-  game.players.forEach(function(player) {
-    if(playerID == player.playerID) {
-      player.hands[hand].cards.push(drawCard(game));
-    }
-  });
+dealCard = function(game, player, hand) {
+  player.hands[hand].cards.push(drawCard(game));
 }
 
 syncMoney = function(user, player) {
@@ -89,6 +85,14 @@ advanceMove = function(game) {
   }
 }
 
+currentPlayerStay = function(game, user) {
+  if(currentPlayer.playerID != user.playerID) {
+    return false;
+  }
+  advanceMove(game);
+  return true;
+}
+
 currentPlayerBet = function(game, user, amount) {
   currentPlayer = game.players[game.currentPlayer];
   if(user.money < amount || currentPlayer.playerID != user.playerID) {
@@ -101,6 +105,16 @@ currentPlayerBet = function(game, user, amount) {
   return true;
 }
 
+currentPlayerHit = function(game, user) {
+  currentPlayer = game.players[game.currentPlayer];
+  if(currentPlayer.playerID != user.playerID) {
+    return false;
+  }
+  dealCard(game, currentPlayer, game.currentPlayerHand);
+  advanceMove(game);
+  return true;
+}
+
 exports.dealCard = dealCard;
 exports.startNewRound = startNewRound;
 exports.addPlayer = addPlayer;
@@ -109,4 +123,6 @@ exports.addQueuedPlayers = addQueuedPlayers;
 exports.isPlayerMove = isPlayerMove;
 exports.advanceMove = advanceMove;
 exports.syncMoney = syncMoney;
+exports.currentPlayerStay = currentPlayerStay;
 exports.currentPlayerBet = currentPlayerBet;
+exports.currentPlayerHit = currentPlayerHit;

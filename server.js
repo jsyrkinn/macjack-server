@@ -85,6 +85,26 @@ app.post('/games/:gameid/join.json', function(req, res) {
 
 // Game logic
 
+app.post('/games/:gameid/stay.json', function(req,res) {
+  game = games[req.params.gameid];
+  if(game) {
+    auth = req.get('X-Auth-Code');
+    user = authDict[auth];
+    if(user) {
+      if(controller.currentPlayerStay(game, user)) {
+        res.status(200).send("PlayerStayed");
+      } else {
+        res.status(404).send("Not your turn");
+      }
+    } else{
+      res.status(404).send("User not in game");
+    }
+  } else {
+    res.status(404).send("No such game");
+  }
+});
+
+
 app.post('/games/:gameid/bet.json', function(req, res) {
   game = games[req.params.gameid];
   if(game) {
@@ -110,6 +130,25 @@ app.post('/games/:gameid/bet.json', function(req, res) {
     }
   } else {
     res.status(404).send("Game not found");
+  }
+});
+
+app.post('/games/:gameid/hit.json', function(req,res) {
+  game = games[req.params.gameid];
+  if(game) {
+    auth = req.get('X-Auth-Code');
+    user = authDict[auth];
+    if(user) {
+      if(controller.currentPlayerHit(game, user)) {
+        res.status(200).send("Card dealt");
+      } else {
+        res.status(404).send("Not your turn");
+      }
+    } else{
+      res.status(404).send("User not in game");
+    }
+  } else {
+    res.status(404).send("No such game");
   }
 });
 
