@@ -86,7 +86,7 @@ advanceMove = function(game) {
 }
 
 currentPlayerStay = function(game, user) {
-  if(currentPlayer.playerID != user.playerID) {
+  if(currentPlayer.playerID != user.playerID || game.betting) {
     return false;
   }
   advanceMove(game);
@@ -95,7 +95,9 @@ currentPlayerStay = function(game, user) {
 
 currentPlayerBet = function(game, user, amount) {
   currentPlayer = game.players[game.currentPlayer];
-  if(user.money < amount || currentPlayer.playerID != user.playerID) {
+  if(user.money < amount ||
+      currentPlayer.playerID != user.playerID ||
+      !game.betting) {
     return false;
   }
   user.money -= amount;
@@ -107,7 +109,7 @@ currentPlayerBet = function(game, user, amount) {
 
 currentPlayerHit = function(game, user) {
   currentPlayer = game.players[game.currentPlayer];
-  if(currentPlayer.playerID != user.playerID) {
+  if(currentPlayer.playerID != user.playerID || game.betting) {
     return false;
   }
   dealCard(game, currentPlayer, game.currentPlayerHand);

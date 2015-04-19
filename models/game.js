@@ -10,6 +10,7 @@ function Game() {
   this.moveNumber = 0;
   this.currentPlayer = 0;
   this.currentPlayerHand = 0;
+  this.betting = true;
 }
 
 module.exports = Game;
