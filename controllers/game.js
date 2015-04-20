@@ -83,6 +83,9 @@ advanceMove = function(game) {
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
     game.currentPlayerHand = 0;
   }
+  if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
+    game.betting = false;
+  }
 }
 
 currentPlayerStay = function(game, user) {
