@@ -11,6 +11,7 @@ function Game() {
   this.currentPlayer = 0;
   this.currentPlayerHand = 0;
   this.betting = true;
+  this.finished = false;
 }
 
 module.exports = Game;
