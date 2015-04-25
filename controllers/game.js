@@ -118,14 +118,42 @@ handTotals = function(hand) {
   return totals.sort();
 }
 
+bestTotal = function(totals) {
+  bestScore = 0;
+  totals.forEach(function(total) {
+    if(bestScore < total && total <= 21) {
+      bestScore = total;
+    }
+  });
+  return bestScore;
+}
+
 finishRound = function(userDict, game) {
   game.finished = true;
-  while(handTotals(game.dealerHand)[0] < 17) {
+  do {
     dealCard(game, game.dealerHand);
+    totals = handTotals(game.dealerHand);
+  } while (totals[0] < 17);
+  if(21 < totals[0]) {
+    game.dealerHand.busted = true;
   }
+  bestDealerTotal = bestTotal(game.dealerHand);
   game.players.forEach(function(player) {
+    user = userDict[player.playerID];
     player.hands.forEach(function(hand) {
+      if(!hand.busted) {
+        handBestTotal = bestTotal(handTotals(hand));
+        if(game.dealerHand.busted || dealerBestTotal < handBestTotal) {
+          user.money += bet * 2;
+        } else if (dealerBestTotal == handBestTotal) {
+          user.money += bet;
+        }
+      }
     });
+    if(user.money == 0) {
+      user.numLoses++;
+    }
+    syncMoney(user, player);
   });
 }
 
