@@ -93,10 +93,12 @@ app.post('/games/:gameid/stay.json', function(req,res) {
     auth = authDict[req.get('X-Auth-Code')];
     if(auth) {
       user = userDict[auth];
-      if(controller.currentPlayerStay(game, user)) {
-        res.status(200).send("PlayerStayed");
-      } else {
-        res.status(404).send("Not your turn");
+      if(controller.isPlayerMove(game, user)) {
+        if(controller.currentPlayerStay(userDict, game)) {
+          res.status(200).send("PlayerStayed");
+        } else {
+          res.status(404).send("Not your turn");
+        }
       }
     } else {
       res.status(404).send("User not in game");
@@ -116,7 +118,7 @@ app.post('/games/:gameid/bet.json', function(req, res) {
       if(controller.hasPlayer(game, user)) {
         if(controller.isPlayerMove(game, user)) {
           amount = req.query.amount;
-          if(controller.currentPlayerBet(game, user, amount)) {
+          if(controller.currentPlayerBet(userDict, game, amount)) {
             res.status(200).send('Bet accepted');
           } else {
             res.status(404).send('Bet denied')
@@ -141,10 +143,12 @@ app.post('/games/:gameid/hit.json', function(req,res) {
     auth = authDict[req.get('X-Auth-Code')];
     user = userDict[auth];
     if(user) {
-      if(controller.currentPlayerHit(game, user)) {
-        res.status(200).send("Card dealt");
-      } else {
-        res.status(404).send("Not your turn");
+      if(controller.isPlayerMove(game, user)){
+        if(controller.currentPlayerHit(userDict, game)) {
+          res.status(200).send("Card dealt");
+        } else {
+          res.status(404).send("Not your turn");
+        }
       }
     } else{
       res.status(404).send("User not in game");
