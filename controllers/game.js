@@ -123,7 +123,7 @@ finishRound = function(game) {
   game.finished = true;
   while(handTotals(game.dealerHand)[0] < 17) {
     dealCard(game, game.dealerHand);
-  }  
+  }
 }
 
 currentPlayerStay = function(game, user) {
@@ -138,7 +138,7 @@ currentPlayerStay = function(game, user) {
 
 currentPlayerBet = function(game, user, amount) {
   currentPlayer = game.players[game.currentPlayer];
-  if(user.money < amount ||
+  if(amount <= 0 ||user.money < amount ||
       currentPlayer.playerID != user.playerID ||
       !game.betting) {
     return false;
