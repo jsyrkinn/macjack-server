@@ -11,7 +11,8 @@ drawCard = function(game) {
   }
 }
 
-dealCard = function(hand) {
+dealCard = function(game, hand) {
+  //TODO make game handle running out of cards
   hand.cards.push(drawCard(game));
 }
 
@@ -55,8 +56,8 @@ startNewRound = function(game) {
   })
   game.currentPlayer = 0;
   game.currentPlayerHand = 0;
-  game.dealerCards = [];
-  game.dealerCards.push(drawCard(game));
+  game.dealerHand = new Hand();
+  dealCard(game, game.dealerHand);
 }
 
 hasPlayer = function(game, user) {
@@ -118,6 +119,13 @@ handTotals = function(hand) {
   return totals.sort();
 }
 
+finishRound = function(game) {
+  game.finished = true;
+  while(handTotals(game.dealerHand)[0] < 17) {
+    dealCard(game, game.dealerHand);
+  }  
+}
+
 currentPlayerStay = function(game, user) {
   if(currentPlayer.playerID != user.playerID || game.betting) {
     return false;
@@ -149,7 +157,7 @@ currentPlayerHit = function(game, user) {
     return false;
   }
   hand = currentPlayer.hands[game.currentPlayerHand];
-  dealCard(hand);
+  dealCard(game, hand);
   totals = handTotals(hand);
   if(totals[0] == 21) {
     advanceHand(game);
