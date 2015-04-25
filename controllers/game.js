@@ -78,7 +78,7 @@ advanceMove = function(game) {
   game.moveNumber++
 }
 
-advanceHand = function(game) {
+advanceHand = function(userDict, game) {
   game.currentPlayerHand++
   // TODO handle all players not active
   while(
@@ -92,8 +92,7 @@ advanceHand = function(game) {
     game.betting = false;
   }
   if(!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
-    // TODO end game calculations
-    game.finished = true;
+    finishRound(userDict, game);
   }
 }
 
@@ -119,11 +118,15 @@ handTotals = function(hand) {
   return totals.sort();
 }
 
-finishRound = function(game) {
+finishRound = function(userDict, game) {
   game.finished = true;
   while(handTotals(game.dealerHand)[0] < 17) {
     dealCard(game, game.dealerHand);
   }
+  game.players.forEach(function(player) {
+    player.hands.forEach(function(hand) {
+    });
+  });
 }
 
 currentPlayerStay = function(userDict, game) {
@@ -132,8 +135,8 @@ currentPlayerStay = function(userDict, game) {
     return false;
   }
   currentPlayer.hands[game.currentPlayerHand].finished = true;
-  advanceHand(game);
   advanceMove(game);
+  advanceHand(userDict, game);
   return true;
 }
 
@@ -147,8 +150,8 @@ currentPlayerBet = function(userDict, game, amount) {
   user.money -= amount;
   syncMoney(user, currentPlayer);
   currentPlayer.hands[game.currentPlayerHand].bet = amount;
-  advanceHand(game);
   advanceMove(game);
+  advanceHand(userDict, game);
   return true;
 }
 
@@ -160,13 +163,15 @@ currentPlayerHit = function(userDict, game) {
   hand = currentPlayer.hands[game.currentPlayerHand];
   dealCard(game, hand);
   totals = handTotals(hand);
-  if(totals[0] == 21) {
-    advanceHand(game);
-  } else if(handTotals(hand)[0] > 21) {
-    hand.busted = true;
-    advanceHand(game);
-  }
   advanceMove(game);
+  blackJack = 21 in totals;
+  if(blackjack || 21 < totals[0]) {
+    if(!blackjack) {
+      hand.busted = true;
+    }
+    hand.finished = true;
+    advanceHand(userDict, game);
+  }
   return true;
 }
 
