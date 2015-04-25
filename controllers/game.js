@@ -165,8 +165,8 @@ currentPlayerHit = function(userDict, game) {
   totals = handTotals(hand);
   advanceMove(game);
   blackJack = 21 in totals;
-  if(blackjack || 21 < totals[0]) {
-    if(!blackjack) {
+  if(blackJack || 21 < totals[0]) {
+    if(!blackJack) {
       hand.busted = true;
     }
     hand.finished = true;
