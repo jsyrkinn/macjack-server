@@ -11,8 +11,8 @@ drawCard = function(game) {
   }
 }
 
-dealCard = function(game, player, hand) {
-  player.hands[hand].cards.push(drawCard(game));
+dealCard = function(hand) {
+  hand.cards.push(drawCard(game));
 }
 
 syncMoney = function(user, player) {
@@ -73,6 +73,10 @@ isPlayerMove = function(game, user) {
   return game.players[game.currentPlayer].playerID == user.playerID;
 }
 
+advanceMove = function(game) {
+  game.moveNumber++
+}
+
 advanceHand = function(game) {
   game.currentPlayerHand++
   // TODO handle all players not active
@@ -92,43 +96,11 @@ advanceHand = function(game) {
   }
 }
 
-currentPlayerStay = function(game, user) {
-  if(currentPlayer.playerID != user.playerID || game.betting) {
-    return false;
-  }
-  currentPlayer.hands[game.currentPlayerHand].finished = true;
-  advanceHand(game);
-  return true;
-}
-
-currentPlayerBet = function(game, user, amount) {
-  currentPlayer = game.players[game.currentPlayer];
-  if(user.money < amount ||
-      currentPlayer.playerID != user.playerID ||
-      !game.betting) {
-    return false;
-  }
-  user.money -= amount;
-  syncMoney(user, currentPlayer);
-  currentPlayer.hands[game.currentPlayerHand].bet = amount;
-  advanceHand(game);
-  return true;
-}
-
-currentPlayerHit = function(game, user) {
-  currentPlayer = game.players[game.currentPlayer];
-  if(currentPlayer.playerID != user.playerID || game.betting) {
-    return false;
-  }
-  dealCard(game, currentPlayer, game.currentPlayerHand);
-  return true;
-}
-
 handTotals = function(hand) {
   var totals = [];
   totals[0] = 0;
   for (var i = 0; i < hand.cards.length; i++ ) {
-    var card = this.cards[i];
+    var card = hand.cards[i];
     var totLength = totals.length;
     for(var b = 0; b < totLength; b++){
       if (card.rank != 1 && card.rank <= 10) {
@@ -143,7 +115,50 @@ handTotals = function(hand) {
       }
     }
   }
-  return total.sort();
+  return totals.sort();
+}
+
+currentPlayerStay = function(game, user) {
+  if(currentPlayer.playerID != user.playerID || game.betting) {
+    return false;
+  }
+  currentPlayer.hands[game.currentPlayerHand].finished = true;
+  advanceHand(game);
+  advanceMove(game);
+  return true;
+}
+
+currentPlayerBet = function(game, user, amount) {
+  currentPlayer = game.players[game.currentPlayer];
+  if(user.money < amount ||
+      currentPlayer.playerID != user.playerID ||
+      !game.betting) {
+    return false;
+  }
+  user.money -= amount;
+  syncMoney(user, currentPlayer);
+  currentPlayer.hands[game.currentPlayerHand].bet = amount;
+  advanceHand(game);
+  advanceMove(game);
+  return true;
+}
+
+currentPlayerHit = function(game, user) {
+  currentPlayer = game.players[game.currentPlayer];
+  if(currentPlayer.playerID != user.playerID || game.betting) {
+    return false;
+  }
+  hand = currentPlayer.hands[game.currentPlayerHand];
+  dealCard(hand);
+  totals = handTotals(hand);
+  if(totals[0] == 21) {
+    advanceHand(game);
+  } else if(handTotals(hand)[0] > 21) {
+    hand.busted = true;
+    advanceHand(game);
+  }
+  advanceMove(game);
+  return true;
 }
 
 exports.dealCard = dealCard;

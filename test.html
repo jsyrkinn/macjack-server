@@ -91,7 +91,7 @@
           if (this.status >= 200 && this.status < 400) {
             // Success!
             console.log('Betted');
-            state(gameData);
+            judyBet(gameData);
           } else {
             // We reached our target server, but it returned an error
 
@@ -103,6 +103,50 @@
         };
         testRequest.send();
       }
+
+      function judyBet(gameData) {
+        testRequest = new XMLHttpRequest();
+        testRequest.open( "POST", 'http://localhost:1337/games/'+ gameData.gameID + '/bet.json?amount=500', true );
+        testRequest.setRequestHeader('X-Auth-Code', judyData.auth);
+        testRequest.onload = function() {
+          if (this.status >= 200 && this.status < 400) {
+            // Success!
+            console.log('Betted');
+            evanHit(gameData);
+          } else {
+            // We reached our target server, but it returned an error
+
+          }
+        }
+
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+
+        function evanHit(gameData) {
+          testRequest = new XMLHttpRequest();
+          testRequest.open( "POST", 'http://localhost:1337/games/'+ gameData.gameID + '/hit.json', true );
+          testRequest.setRequestHeader('X-Auth-Code', evanData.auth);
+          testRequest.onload = function() {
+            if (this.status >= 200 && this.status < 400) {
+              // Success!
+              console.log('Evan Hit');
+              state(gameData);
+            } else {
+              // We reached our target server, but it returned an error
+
+            }
+          };
+
+        testRequest.onerror = function() {
+          console.log('Connection Failed');
+        };
+        testRequest.send();
+      }
+
+
 
       function state(gameData) {
         testRequest = new XMLHttpRequest();
