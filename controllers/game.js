@@ -86,12 +86,17 @@ advanceMove = function(game) {
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
     game.betting = false;
   }
+  if(!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
+    // TODO end game calculations
+    game.finished = true;
+  }
 }
 
 currentPlayerStay = function(game, user) {
   if(currentPlayer.playerID != user.playerID || game.betting) {
     return false;
   }
+  currentPlayer.hands[game.currentPlayerHand].finished = true;
   advanceMove(game);
   return true;
 }
