@@ -73,7 +73,7 @@ isPlayerMove = function(game, user) {
   return game.players[game.currentPlayer].playerID == user.playerID;
 }
 
-advanceMove = function(game) {
+advanceHand = function(game) {
   game.currentPlayerHand++
   // TODO handle all players not active
   while(
@@ -97,7 +97,7 @@ currentPlayerStay = function(game, user) {
     return false;
   }
   currentPlayer.hands[game.currentPlayerHand].finished = true;
-  advanceMove(game);
+  advanceHand(game);
   return true;
 }
 
@@ -111,7 +111,7 @@ currentPlayerBet = function(game, user, amount) {
   user.money -= amount;
   syncMoney(user, currentPlayer);
   currentPlayer.hands[game.currentPlayerHand].bet = amount;
-  advanceMove(game);
+  advanceHand(game);
   return true;
 }
 
@@ -121,8 +121,29 @@ currentPlayerHit = function(game, user) {
     return false;
   }
   dealCard(game, currentPlayer, game.currentPlayerHand);
-  advanceMove(game);
   return true;
+}
+
+handTotals = function(hand) {
+  var totals = [];
+  totals[0] = 0;
+  for (var i = 0; i < hand.cards.length; i++ ) {
+    var card = this.cards[i];
+    var totLength = totals.length;
+    for(var b = 0; b < totLength; b++){
+      if (card.rank != 1 && card.rank <= 10) {
+          totals[b] += card.rank;
+      }
+      else if (card.rank > 10){
+          totals[b] += 10;
+      }
+      else {
+          totals.push(totals[b] + 11);
+          totals[b]+=1;
+      }
+    }
+  }
+  return total.sort();
 }
 
 exports.dealCard = dealCard;
@@ -131,7 +152,7 @@ exports.addPlayer = addPlayer;
 exports.hasPlayer = hasPlayer;
 exports.addQueuedPlayers = addQueuedPlayers;
 exports.isPlayerMove = isPlayerMove;
-exports.advanceMove = advanceMove;
+exports.advanceHand = advanceHand;
 exports.syncMoney = syncMoney;
 exports.currentPlayerStay = currentPlayerStay;
 exports.currentPlayerBet = currentPlayerBet;
