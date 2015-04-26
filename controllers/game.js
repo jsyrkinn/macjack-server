@@ -57,7 +57,6 @@ startNewRound = function(game) {
   game.currentPlayer = 0;
   game.currentPlayerHand = 0;
   game.dealerHand = new Hand();
-  dealCard(game, game.dealerHand);
 }
 
 hasPlayer = function(game, user) {
@@ -89,11 +88,21 @@ advanceHand = function(userDict, game) {
     game.currentPlayerHand = 0;
   }
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
-    game.betting = false;
+    dealFirstCards(game);
   }
   if(!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
     finishRound(userDict, game);
   }
+}
+
+dealFirstCards = function(game) {
+  game.betting = false;
+  game.players.forEach(function(player) {
+    var hand = player.hands[0];
+    dealCard(game, hand);
+    dealCard(game, hand);
+  });
+  dealCard(game, game.dealerHand);
 }
 
 handTotals = function(hand) {
@@ -132,21 +141,21 @@ finishRound = function(userDict, game) {
   game.finished = true;
   do {
     dealCard(game, game.dealerHand);
-    totals = handTotals(game.dealerHand);
-  } while (totals[0] < 17);
-  if(21 < totals[0]) {
+    dealerTotals = handTotals(game.dealerHand);
+  } while (dealerTotals[0] < 17);
+  if(21 < dealerTotals[0]) {
     game.dealerHand.busted = true;
   }
-  bestDealerTotal = bestTotal(game.dealerHand);
+  dealerBestTotal = bestTotal(dealerTotals);
   game.players.forEach(function(player) {
     user = userDict[player.playerID];
     player.hands.forEach(function(hand) {
       if(!hand.busted) {
         handBestTotal = bestTotal(handTotals(hand));
         if(game.dealerHand.busted || dealerBestTotal < handBestTotal) {
-          user.money += bet * 2;
+          user.money += hand.bet * 2;
         } else if (dealerBestTotal == handBestTotal) {
-          user.money += bet;
+          user.money += hand.bet;
         }
       }
     });
