@@ -3,6 +3,10 @@ var Player = require('../models/player');
 var Card = require('../models/card');
 var Hand = require('../models/hand');
 
+updateTime = function(game) {
+  game.lastMoveTime = Date.now();
+}
+
 drawCard = function(game) {
   var deck = game.deck
   if (deck.length > 0) {
@@ -51,12 +55,47 @@ startNewRound = function(game) {
       });
   });
   addQueuedPlayers(game);
-  game.players.forEach(function(player) {
-    player.hands = [new Hand()];
-  })
+  i = game.players.length;
+  while(i--) {
+    player = game.players[i];
+    if(player.active) {
+      player.hands = [new Hand()];
+    } else {
+      game.players.splice(i, 1);
+    }
+  }
   game.currentPlayer = 0;
   game.currentPlayerHand = 0;
   game.dealerHand = new Hand();
+}
+
+checkTimeouts = function(userDict, game) {
+  if(!game.finished) {
+    if(Date.now() - game.lastMoveTime > 120000) {
+      // player timed out on their move
+      game.players[game.currentPlayer].active = false;
+      advanceMove(game);
+      advanceHand(userDict, game);
+    }
+  } else {
+    if(Date.now() - game.lastMoveTime > 120000) {
+      // all in active players removed and new game started
+      startNewRound(game);
+    }
+  }
+}
+
+continueToNextRound = function(game, playerID) {
+  if(!game.finished) {
+    return false;
+  }
+  //TODO check if player is in game
+  game.players.forEach(function(player) {
+    if(player.playerID == playerID) {
+      player.active = true;
+    }
+  });
+  return true;
 }
 
 hasPlayer = function(game, user) {
@@ -75,6 +114,7 @@ isPlayerMove = function(game, user) {
 
 advanceMove = function(game) {
   game.moveNumber++
+  updateTime(game);
 }
 
 advanceHand = function(userDict, game) {
@@ -163,6 +203,7 @@ finishRound = function(userDict, game) {
       user.numLoses++;
     }
     syncMoney(user, player);
+    player.active = false; // must send request before timeout to indicate they want to play the next round
   });
 }
 

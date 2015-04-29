@@ -13,6 +13,7 @@ function Game() {
   this.currentPlayerHand = 0;
   this.betting = true;
   this.finished = false;
+  this.lastMoveTime = 0;
 }
 
 module.exports = Game;
