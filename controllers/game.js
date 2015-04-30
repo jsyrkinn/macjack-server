@@ -233,17 +233,19 @@ currentPlayerBet = function(userDict, game, amount) {
 }
 
 currentPlayerHit = function(userDict, game) {
+  preTotals = handTotals(hand);
+  blackJack = 21 in preTotals;
   currentPlayer = game.players[game.currentPlayer];
-  if(game.betting || game.finished) {
+  if(game.betting || game.finished || blackJack) {
     return false;
   }
   hand = currentPlayer.hands[game.currentPlayerHand];
   dealCard(game, hand);
   totals = handTotals(hand);
   advanceMove(game);
-  blackJack = 21 in totals;
-  if(blackJack || 21 < totals[0]) {
-    if(!blackJack) {
+  twentyOne = 21 in totals;
+  if(twentyOne || 21 < totals[0]) {
+    if(!twentyOne) {
       hand.busted = true;
     }
     hand.finished = true;
