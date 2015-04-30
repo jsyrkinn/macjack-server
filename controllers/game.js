@@ -70,6 +70,9 @@ startNewRound = function(game) {
 }
 
 checkTimeouts = function(userDict, game) {
+  if(game.moveNumber == 0) {
+    return; // shouldn't start until game starts
+  }
   if(!game.finished) {
     if(Date.now() - game.lastMoveTime > 120000) {
       // player timed out on their move
