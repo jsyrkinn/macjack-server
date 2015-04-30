@@ -76,7 +76,8 @@ app.post('/games/:gameid/join.json', function(req, res) {
     auth = authDict[req.get('X-Auth-Code')];
     if(auth) {
       user = userDict[auth];
-      if(!user.inGame) {
+      //if(!user.inGame) {
+      if(true) {
         controller.addPlayer(game, user);
         res.status(200).send();
       }
