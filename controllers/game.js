@@ -236,17 +236,17 @@ currentPlayerBet = function(userDict, game, amount) {
 }
 
 currentPlayerHit = function(userDict, game) {
-  hand = currentPlayer.hands[game.currentPlayerHand];
-  preTotals = handTotals(hand);
-  blackJack = 21 in preTotals;
-  currentPlayer = game.players[game.currentPlayer];
+  var currentPlayer = game.players[game.currentPlayer];
+  var hand = currentPlayer.hands[game.currentPlayerHand];
+  var preTotals = handTotals(hand);
+  var blackJack = 21 in preTotals;
   if(game.betting || game.finished || blackJack) {
     return false;
   }
   dealCard(game, hand);
-  totals = handTotals(hand);
+  var totals = handTotals(hand);
   advanceMove(game);
-  twentyOne = 21 in totals;
+  var twentyOne = 21 in totals;
   if(twentyOne || 21 < totals[0]) {
     if(!twentyOne) {
       hand.busted = true;
