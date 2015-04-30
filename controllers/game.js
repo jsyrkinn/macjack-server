@@ -85,13 +85,13 @@ checkTimeouts = function(userDict, game) {
   }
 }
 
-continueToNextRound = function(game, playerID) {
+continueToNextRound = function(game, user) {
   if(!game.finished) {
     return false;
   }
   //TODO check if player is in game
   game.players.forEach(function(player) {
-    if(player.playerID == playerID) {
+    if(player.playerID == user.playerID) {
       player.active = true;
     }
   });
@@ -261,6 +261,8 @@ exports.addQueuedPlayers = addQueuedPlayers;
 exports.isPlayerMove = isPlayerMove;
 exports.advanceHand = advanceHand;
 exports.syncMoney = syncMoney;
+exports.checkTimeouts = checkTimeouts;
+exports.continueToNextRound = continueToNextRound;
 exports.currentPlayerStay = currentPlayerStay;
 exports.currentPlayerBet = currentPlayerBet;
 exports.currentPlayerHit = currentPlayerHit;
