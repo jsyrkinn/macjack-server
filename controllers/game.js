@@ -209,7 +209,7 @@ finishRound = function(userDict, game) {
 
 currentPlayerStay = function(userDict, game) {
   currentPlayer = game.players[game.currentPlayer];
-  if(game.betting) {
+  if(game.betting || game.finished) {
     return false;
   }
   currentPlayer.hands[game.currentPlayerHand].finished = true;
@@ -221,8 +221,7 @@ currentPlayerStay = function(userDict, game) {
 currentPlayerBet = function(userDict, game, amount) {
   currentPlayer = game.players[game.currentPlayer];
   user = userDict[currentPlayer.playerID];
-  if(amount <= 0 || user.money < amount ||
-      !game.betting) {
+  if(amount <= 0 || user.money < amount || !game.betting || game.finished) {
     return false;
   }
   user.money -= amount;
@@ -235,7 +234,7 @@ currentPlayerBet = function(userDict, game, amount) {
 
 currentPlayerHit = function(userDict, game) {
   currentPlayer = game.players[game.currentPlayer];
-  if(game.betting) {
+  if(game.betting || game.finished) {
     return false;
   }
   hand = currentPlayer.hands[game.currentPlayerHand];
