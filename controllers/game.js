@@ -236,13 +236,13 @@ currentPlayerBet = function(userDict, game, amount) {
 }
 
 currentPlayerHit = function(userDict, game) {
+  hand = currentPlayer.hands[game.currentPlayerHand];
   preTotals = handTotals(hand);
   blackJack = 21 in preTotals;
   currentPlayer = game.players[game.currentPlayer];
   if(game.betting || game.finished || blackJack) {
     return false;
   }
-  hand = currentPlayer.hands[game.currentPlayerHand];
   dealCard(game, hand);
   totals = handTotals(hand);
   advanceMove(game);
