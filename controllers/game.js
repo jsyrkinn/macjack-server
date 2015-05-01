@@ -131,15 +131,16 @@ advanceMove = function(game) {
 
 advanceHand = function(userDict, game) {
   var originalPlayer = game.currentPlayer;
+  var originalHand =
   game.currentPlayerHand++
   while(
       !game.players[game.currentPlayer].active ||
       game.currentPlayerHand >= game.players[game.currentPlayer].hands.length) {
+    game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
+    game.currentPlayerHand = 0;
     if(game.currentPlayer == originalPlayer && !game.players[game.currentPlayer].active) {
       return startNewRound(game);   //all players are inactive
     }
-    game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
-    game.currentPlayerHand = 0;
   }
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
     dealFirstCards(game);
