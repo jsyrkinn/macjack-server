@@ -47,6 +47,8 @@ addQueuedPlayers = function(game) {
 }
 
 startNewRound = function(game) {
+  game.betting = true;
+  game.finished = false;
   game.moveNumber = 0;
   game.deck = [];
   ['Spades', 'Clubs', 'Hearts', 'Diamonds'].forEach(function(suit) {
