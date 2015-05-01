@@ -130,12 +130,15 @@ advanceMove = function(game) {
 }
 
 advanceHand = function(userDict, game) {
+  originalPlayer = game.currentPlayer;
   game.currentPlayerHand++
-  // TODO handle all players not active
   while(
       !game.players[game.currentPlayer].active ||
-      game.currentPlayerHand >= game.players[game.currentPlayer].hands.length
-    ) {
+      game.currentPlayerHand >= game.players[game.currentPlayer].hands.length ||
+      game.currentPlayer == originalPlayer) {
+    if(game.currentPlayer == originalPlayer) {
+      return startNewRound(game);   //all players are inactive
+    }
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
     game.currentPlayerHand = 0;
   }
