@@ -55,7 +55,7 @@ app.post('/games/newgame.json', function(req, res) {
     var user = userDict[auth];
     var gameCode = utils.newGame(games);
     var game = games[gameCode];
-    utils.log(game, " Created.");
+    utils.log(game, "Created.");
     controller.addPlayer(game, user);
     controller.startNewRound(game);
     res.status(200).json({gameID: gameCode});

@@ -216,6 +216,8 @@ finishRound = function(userDict, game) {
         } else {
           losses++;
         }
+      } else {
+        losses++;
       }
     });
     if(user.money == 0) {
@@ -258,7 +260,7 @@ currentPlayerHit = function(userDict, game) {
   var currentPlayer = game.players[game.currentPlayer];
   var hand = currentPlayer.hands[game.currentPlayerHand];
   var preTotals = handTotals(hand);
-  var blackJack = 21 in preTotals;
+  var blackJack = -1 < preTotals.indexOf(21);
   if(game.betting || game.finished || blackJack) {
     return false;
   }
@@ -266,7 +268,7 @@ currentPlayerHit = function(userDict, game) {
   var totals = handTotals(hand);
   advanceMove(game);
   utils.log(game, utils.printPlayer(currentPlayer) + " hit.");
-  var twentyOne = 21 in totals;
+  var twentyOne = -1 < totals.indexOf(21);
   if(twentyOne || 21 < totals[0]) {
     if(!twentyOne) {
       hand.busted = true;
