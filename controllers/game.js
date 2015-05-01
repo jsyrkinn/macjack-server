@@ -130,7 +130,7 @@ advanceMove = function(game) {
 }
 
 advanceHand = function(userDict, game) {
-  originalPlayer = game.currentPlayer;
+  var originalPlayer = game.currentPlayer;
   game.currentPlayerHand++
   while(
       !game.players[game.currentPlayer].active ||
