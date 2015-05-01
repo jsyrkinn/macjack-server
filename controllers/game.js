@@ -229,7 +229,7 @@ finishRound = function(userDict, game) {
     syncMoney(user, player);
     player.active = false; // must send request before timeout to indicate they want to play the next round
   });
-  utils.log(game, " finished - W(" + wins + ") T(" + ties + ") L(" + losses + ").");
+  utils.log(game, "Finished - W(" + wins + ") T(" + ties + ") L(" + losses + ").");
 }
 
 currentPlayerStay = function(userDict, game) {
