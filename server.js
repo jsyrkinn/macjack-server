@@ -28,7 +28,7 @@ app.post('/signup.json', function(req, res) {
   } while (utils.hasID(authDict, potentialID));
   authDict[potentialCode] = potentialID;
   userDict[potentialID] = new User(potentialID, name);
-  res.json({auth: potentialCode, playerID: potentialID}); // response to client
+  res.status(200).json({auth: potentialCode, playerID: potentialID}); // response to client
 });
 
 app.get('/games/:gameid/state.json', function(req, res) {
@@ -36,7 +36,7 @@ app.get('/games/:gameid/state.json', function(req, res) {
   if(gameID in games) {
     var game = games[gameID];
     if(req.params.movenumber == game.moveNumber) {
-      res.status(400).send("Client up to date");
+      res.status(406).send("Client up to date");
       return;
     }
     var auth = authDict[req.get('X-Auth-Code')];
@@ -44,7 +44,7 @@ app.get('/games/:gameid/state.json', function(req, res) {
       if(controller.hasPlayer(game, userDict[auth])) {
         controller.checkTimeouts(userDict, game);
         res.json(game);
-      } else res.status(404).send("Player not in game");
+      } else res.status(401).send("Player not in game");
     } else res.status(404).send("Player not found");
   } else res.status(404).send("Game not found");
 });
@@ -59,7 +59,7 @@ app.post('/games/newgame.json', function(req, res) {
     controller.addPlayer(game, user);
     controller.startNewRound(game);
     res.status(200).json({gameID: gameCode});
-  } else res.status(404).send("Bad auth");
+  } else res.status(401).send("Bad auth");
 
 });
 
@@ -88,9 +88,9 @@ app.post('/games/:gameid/continue.json', function(req, res) {
       if(user) {
         if(controller.continueToNextRound(game, user)) {
           res.status(200).send("Continued");
-        } else res.status(404).send("Game not finished");
-      } else res.status(404).send("Invalid user");
-    } else res.status(404).send("Invalid auth");
+        } else res.status(403).send("Game not finished");
+      } else res.status(401).send("Invalid user");
+    } else res.status(401).send("Invalid auth");
   } else res.status(404).send("No such game");
 });
 
@@ -105,9 +105,9 @@ app.post('/games/:gameid/stay.json', function(req,res) {
       if(controller.isPlayerMove(game, user)) {
         if(controller.currentPlayerStay(userDict, game)) {
           res.status(200).send("PlayerStayed");
-        } else res.status(404).send("Not allowed");
-      } else res.status(404).send("Not your turn");
-    } else res.status(404).send("User not in game");
+        } else res.status(406).send("Not allowed");
+      } else res.status(401).send("Not your turn");
+    } else res.status(401).send("User not in game");
   } else res.status(404).send("No such game");
 
 });
@@ -124,10 +124,10 @@ app.post('/games/:gameid/bet.json', function(req, res) {
           amount = req.query.amount;
           if(controller.currentPlayerBet(userDict, game, amount)) {
             res.status(200).send('Bet accepted');
-          } else res.status(404).send('Bet denied');
-        } else res.status(404).send("Not your move");
+          } else res.status(406).send('Bet denied');
+        } else res.status(401).send("Not your move");
       } else res.status(404).send("Player not in game");
-    } else res.status(404).send("Bad auth");
+    } else res.status(401).send("Bad auth");
   } else res.status(404).send("Game not found");
 });
 
@@ -140,9 +140,9 @@ app.post('/games/:gameid/hit.json', function(req,res) {
       if(controller.isPlayerMove(game, user)){
         if(controller.currentPlayerHit(userDict, game)) {
           res.status(200).send("Card dealt");
-        } else res.status(404).send("Not allowed");
-      } else res.status(404).send("Not your turn");
-    } else res.status(404).send("User not in game");
+        } else res.status(406).send("Not allowed");
+      } else res.status(401).send("Not your turn");
+    } else res.status(401).send("User not in game");
   } else res.status(404).send("No such game");
 });
 
