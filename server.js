@@ -44,15 +44,9 @@ app.get('/games/:gameid/state.json', function(req, res) {
       if(controller.hasPlayer(game, userDict[auth])) {
         controller.checkTimeouts(userDict, game);
         res.json(game);
-      } else {
-        res.status(404).send("Player not in game");
-      }
-    } else {
-      res.status(404).send("Player not found");
-    }
-  } else {
-    res.status(404).send("Game not found");
-  }
+      } else res.status(404).send("Player not in game");
+    } else res.status(404).send("Player not found");
+  } else res.status(404).send("Game not found");
 });
 
 app.post('/games/newgame.json', function(req, res) {
@@ -64,9 +58,8 @@ app.post('/games/newgame.json', function(req, res) {
     controller.addPlayer(game, user);
     controller.startNewRound(game);
     res.status(200).json({gameID: gameCode});
-  } else {
-    res.status(404).send("Bad auth");
-  }
+  } else res.status(404).send("Bad auth");
+
 });
 
 app.post('/games/:gameid/join.json', function(req, res) {
@@ -82,9 +75,7 @@ app.post('/games/:gameid/join.json', function(req, res) {
         res.status(200).send();
       }
     }
-  } else {
-    res.status(404).send("Game not found");
-  }
+  } else res.status(404).send("Game not found");
 });
 
 app.post('/games/:gameid/continue.json', function(req, res) {
@@ -96,15 +87,10 @@ app.post('/games/:gameid/continue.json', function(req, res) {
       if(user) {
         if(controller.continueToNextRound(game, user)) {
           res.status(200).send("Continued");
-        } else {
-          res.status(404).send("Game not finished")
-        }
-      }
-      res.status(404).send("Invalid user");
-    }
-    res.status(404).send("Invalid auth");
-  }
-  res.status(404).send("No such game");
+        } else res.status(404).send("Game not finished");
+      } else res.status(404).send("Invalid user");
+    } else res.status(404).send("Invalid auth");
+  } else res.status(404).send("No such game");
 });
 
 // Game logic
@@ -118,16 +104,11 @@ app.post('/games/:gameid/stay.json', function(req,res) {
       if(controller.isPlayerMove(game, user)) {
         if(controller.currentPlayerStay(userDict, game)) {
           res.status(200).send("PlayerStayed");
-        } else {
-          res.status(404).send("Not your turn");
-        }
-      }
-    } else {
-      res.status(404).send("User not in game");
-    }
-  } else {
-    res.status(404).send("No such game");
-  }
+        } else res.status(404).send("Not allowed");
+      } else res.status(404).send("Not your turn");
+    } else res.status(404).send("User not in game");
+  } else res.status(404).send("No such game");
+
 });
 
 
@@ -142,21 +123,11 @@ app.post('/games/:gameid/bet.json', function(req, res) {
           amount = req.query.amount;
           if(controller.currentPlayerBet(userDict, game, amount)) {
             res.status(200).send('Bet accepted');
-          } else {
-            res.status(404).send('Bet denied')
-          }
-        } else {
-          res.status(404).send("Not your move");
-        }
-      } else {
-        res.status(404).send("Player not in game");
-      }
-    } else {
-      res.status(404).send("Bad auth");
-    }
-  } else {
-    res.status(404).send("Game not found");
-  }
+          } else res.status(404).send('Bet denied');
+        } else res.status(404).send("Not your move");
+      } else res.status(404).send("Player not in game");
+    } else res.status(404).send("Bad auth");
+  } else res.status(404).send("Game not found");
 });
 
 app.post('/games/:gameid/hit.json', function(req,res) {
@@ -168,16 +139,10 @@ app.post('/games/:gameid/hit.json', function(req,res) {
       if(controller.isPlayerMove(game, user)){
         if(controller.currentPlayerHit(userDict, game)) {
           res.status(200).send("Card dealt");
-        } else {
-          res.status(404).send("Not your turn");
-        }
-      }
-    } else{
-      res.status(404).send("User not in game");
-    }
-  } else {
-    res.status(404).send("No such game");
-  }
+        } else res.status(404).send("Not allowed");
+      } else res.status(404).send("Not your turn");
+    } else res.status(404).send("User not in game");
+  } else res.status(404).send("No such game");
 });
 
 app.listen(1337);
