@@ -89,7 +89,7 @@ checkTimeouts = function(userDict, game) {
       advanceHand(userDict, game);
     }
   } else {
-    if(Date.now() - game.lastMoveTime > 120000) {
+    if(Date.now() - game.lastMoveTime > 20000) {
       // all in active players removed and new game started
       startNewRound(game);
     }
@@ -265,7 +265,7 @@ currentPlayerHit = function(userDict, game) {
   dealCard(game, hand);
   var totals = handTotals(hand);
   advanceMove(game);
-  utils.log(game, utils.printPlayer(currentPlayer) + "hit.");
+  utils.log(game, utils.printPlayer(currentPlayer) + " hit.");
   var twentyOne = 21 in totals;
   if(twentyOne || 21 < totals[0]) {
     if(!twentyOne) {
