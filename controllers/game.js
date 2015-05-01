@@ -2,6 +2,7 @@
 var Player = require('../models/player');
 var Card = require('../models/card');
 var Hand = require('../models/hand');
+var utils = require('./utils');
 
 updateTime = function(game) {
   game.lastMoveTime = Date.now();
@@ -34,8 +35,10 @@ addPlayer = function(game, user) {
   syncMoney(user, player);
   if(game.moveNumber == 0) {
     game.players.push(player);
+    utils.log(game, utils.printPlayer(player) + " joined.");
   } else {
     game.joinQueue.push(player);
+    utils.log(game, utils.printPlayer(player) + " added to queue.");
   }
 }
 
@@ -69,6 +72,7 @@ startNewRound = function(game) {
   game.currentPlayer = 0;
   game.currentPlayerHand = 0;
   game.dealerHand = new Hand();
+  utils.log(game, "Started new round.");
 }
 
 checkTimeouts = function(userDict, game) {
@@ -78,8 +82,10 @@ checkTimeouts = function(userDict, game) {
   if(!game.finished) {
     if(Date.now() - game.lastMoveTime > 120000) {
       // player timed out on their move
-      game.players[game.currentPlayer].active = false;
+      player = game.players[game.currentPlayer];
+      player.active = false;
       advanceMove(game);
+      utils.log(game, utils.printPlayer(player) + " timed out.");
       advanceHand(userDict, game);
     }
   } else {
@@ -98,6 +104,7 @@ continueToNextRound = function(game, user) {
   game.players.forEach(function(player) {
     if(player.playerID == user.playerID) {
       player.active = true;
+      utils.log(game, utils.printPlayer(player) + " continued.");
     }
   });
   return true;
@@ -192,6 +199,9 @@ finishRound = function(userDict, game) {
     game.dealerHand.busted = true;
   }
   dealerBestTotal = bestTotal(dealerTotals);
+  wins = 0;
+  ties = 0;
+  losses = 0;
   game.players.forEach(function(player) {
     user = userDict[player.playerID];
     player.hands.forEach(function(hand) {
@@ -199,8 +209,12 @@ finishRound = function(userDict, game) {
         handBestTotal = bestTotal(handTotals(hand));
         if(game.dealerHand.busted || dealerBestTotal < handBestTotal) {
           user.money += hand.bet * 2;
+          wins++;
         } else if (dealerBestTotal == handBestTotal) {
           user.money += hand.bet;
+          ties++;
+        } else {
+          losses++;
         }
       }
     });
@@ -210,6 +224,7 @@ finishRound = function(userDict, game) {
     syncMoney(user, player);
     player.active = false; // must send request before timeout to indicate they want to play the next round
   });
+  utils.log(game, " finished - W(" + wins + ") T(" + ties + ") L(" + losses + ").");
 }
 
 currentPlayerStay = function(userDict, game) {
@@ -219,6 +234,7 @@ currentPlayerStay = function(userDict, game) {
   }
   currentPlayer.hands[game.currentPlayerHand].finished = true;
   advanceMove(game);
+  utils.log(game, utils.printPlayer(player) + " stayed.");
   advanceHand(userDict, game);
   return true;
 }
@@ -233,6 +249,7 @@ currentPlayerBet = function(userDict, game, amount) {
   syncMoney(user, currentPlayer);
   currentPlayer.hands[game.currentPlayerHand].bet = amount;
   advanceMove(game);
+  utils.log(game, utils.printPlayer(player) + " bet $" + amount + ".");
   advanceHand(userDict, game);
   return true;
 }
@@ -248,6 +265,7 @@ currentPlayerHit = function(userDict, game) {
   dealCard(game, hand);
   var totals = handTotals(hand);
   advanceMove(game);
+  utils.log(game, utils.printPlayer(player) + "hit.");
   var twentyOne = 21 in totals;
   if(twentyOne || 21 < totals[0]) {
     if(!twentyOne) {

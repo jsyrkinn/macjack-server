@@ -20,3 +20,11 @@ exports.newGame = function(games) {
   games[code] = new Game(code);
   return code;
 }
+
+exports.log = function(game, message) {
+  console.log(game.gameID + "-" + game.moveNumber + ": " + message);
+}
+
+exports.printPlayer = function(player) {
+  return player.playerName + " (" + player.playerID + ")";
+}
