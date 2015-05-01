@@ -136,7 +136,7 @@ advanceHand = function(userDict, game) {
       !game.players[game.currentPlayer].active ||
       game.currentPlayerHand >= game.players[game.currentPlayer].hands.length ||
       game.currentPlayer == originalPlayer) {
-    if(game.currentPlayer == originalPlayer) {
+    if(game.currentPlayer == originalPlayer && !game.players[game.currentPlayer].active) {
       return startNewRound(game);   //all players are inactive
     }
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
