@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
 })
 
 app.post('/signup.json', function(req, res) {
-  name = req.query.name;
+  var name = req.query.name;
   do {
     var potentialCode = crypto.randomBytes(32).toString('hex');
   } while (authDict.hasOwnProperty(potentialCode));
@@ -32,14 +32,14 @@ app.post('/signup.json', function(req, res) {
 });
 
 app.get('/games/:gameid/state.json', function(req, res) {
-  gameID = req.params.gameid;
+  var gameID = req.params.gameid;
   if(gameID in games) {
-    game = games[gameID];
+    var game = games[gameID];
     if(req.params.movenumber == game.moveNumber) {
       res.status(400).send("Client up to date");
       return;
     }
-    auth = authDict[req.get('X-Auth-Code')];
+    var auth = authDict[req.get('X-Auth-Code')];
     if(auth) {
       if(controller.hasPlayer(game, userDict[auth])) {
         controller.checkTimeouts(userDict, game);
@@ -50,11 +50,11 @@ app.get('/games/:gameid/state.json', function(req, res) {
 });
 
 app.post('/games/newgame.json', function(req, res) {
-  auth = authDict[req.get('X-Auth-Code')];
+  var auth = authDict[req.get('X-Auth-Code')];
   if(auth) {
-    user = userDict[auth];
-    gameCode = utils.newGame(games);
-    game = games[gameCode];
+    var user = userDict[auth];
+    var gameCode = utils.newGame(games);
+    var game = games[gameCode];
     controller.addPlayer(game, user);
     controller.startNewRound(game);
     res.status(200).json({gameID: gameCode});
@@ -63,12 +63,12 @@ app.post('/games/newgame.json', function(req, res) {
 });
 
 app.post('/games/:gameid/join.json', function(req, res) {
-  gameID = req.params.gameid;
+  var gameID = req.params.gameid;
   if(gameID in games) {
-    game = games[gameID];
-    auth = authDict[req.get('X-Auth-Code')];
+    var game = games[gameID];
+    var auth = authDict[req.get('X-Auth-Code')];
     if(auth) {
-      user = userDict[auth];
+      var user = userDict[auth];
       //if(!user.inGame) {
       if(true) {
         controller.addPlayer(game, user);
@@ -79,11 +79,11 @@ app.post('/games/:gameid/join.json', function(req, res) {
 });
 
 app.post('/games/:gameid/continue.json', function(req, res) {
-  game = games[req.params.gameid];
+  var game = games[req.params.gameid];
   if(game) {
-    auth = authDict[req.get('X-Auth-Code')];
+    var auth = authDict[req.get('X-Auth-Code')];
     if(auth) {
-      user = userDict[auth];
+      var user = userDict[auth];
       if(user) {
         if(controller.continueToNextRound(game, user)) {
           res.status(200).send("Continued");
@@ -96,11 +96,11 @@ app.post('/games/:gameid/continue.json', function(req, res) {
 // Game logic
 
 app.post('/games/:gameid/stay.json', function(req,res) {
-  game = games[req.params.gameid];
+  var game = games[req.params.gameid];
   if(game) {
-    auth = authDict[req.get('X-Auth-Code')];
+    var auth = authDict[req.get('X-Auth-Code')];
     if(auth) {
-      user = userDict[auth];
+      var user = userDict[auth];
       if(controller.isPlayerMove(game, user)) {
         if(controller.currentPlayerStay(userDict, game)) {
           res.status(200).send("PlayerStayed");
@@ -113,10 +113,10 @@ app.post('/games/:gameid/stay.json', function(req,res) {
 
 
 app.post('/games/:gameid/bet.json', function(req, res) {
-  game = games[req.params.gameid];
+  var game = games[req.params.gameid];
   if(game) {
-    auth = authDict[req.get('X-Auth-Code')];
-    user = userDict[auth];
+    var auth = authDict[req.get('X-Auth-Code')];
+    var user = userDict[auth];
     if(user) {
       if(controller.hasPlayer(game, user)) {
         if(controller.isPlayerMove(game, user)) {
@@ -131,10 +131,10 @@ app.post('/games/:gameid/bet.json', function(req, res) {
 });
 
 app.post('/games/:gameid/hit.json', function(req,res) {
-  game = games[req.params.gameid];
+  var game = games[req.params.gameid];
   if(game) {
-    auth = authDict[req.get('X-Auth-Code')];
-    user = userDict[auth];
+    var auth = authDict[req.get('X-Auth-Code')];
+    var user = userDict[auth];
     if(user) {
       if(controller.isPlayerMove(game, user)){
         if(controller.currentPlayerHit(userDict, game)) {

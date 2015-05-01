@@ -31,7 +31,7 @@ syncMoney = function(user, player) {
 
 addPlayer = function(game, user) {
   user.inGame = true;
-  player = new Player(user.playerID, user.playerName);
+  var player = new Player(user.playerID, user.playerName);
   syncMoney(user, player);
   if(game.moveNumber == 0) {
     game.players.push(player);
@@ -60,9 +60,9 @@ startNewRound = function(game) {
       });
   });
   addQueuedPlayers(game);
-  i = game.players.length;
+  var i = game.players.length;
   while(i--) {
-    player = game.players[i];
+    var player = game.players[i];
     if(player.active) {
       player.hands = [new Hand()];
     } else {
@@ -111,7 +111,7 @@ continueToNextRound = function(game, user) {
 }
 
 hasPlayer = function(game, user) {
-  inGame = false;
+  var inGame = false;
   game.players.forEach(function(player) {
     if(user.playerID == player.playerID) {
       inGame = true;
@@ -180,7 +180,7 @@ handTotals = function(hand) {
 }
 
 bestTotal = function(totals) {
-  bestScore = 0;
+  var bestScore = 0;
   totals.forEach(function(total) {
     if(bestScore < total && total <= 21) {
       bestScore = total;
@@ -199,14 +199,14 @@ finishRound = function(userDict, game) {
     game.dealerHand.busted = true;
   }
   dealerBestTotal = bestTotal(dealerTotals);
-  wins = 0;
-  ties = 0;
-  losses = 0;
+  var wins = 0;
+  var ties = 0;
+  var losses = 0;
   game.players.forEach(function(player) {
-    user = userDict[player.playerID];
+    var user = userDict[player.playerID];
     player.hands.forEach(function(hand) {
       if(!hand.busted) {
-        handBestTotal = bestTotal(handTotals(hand));
+        var handBestTotal = bestTotal(handTotals(hand));
         if(game.dealerHand.busted || dealerBestTotal < handBestTotal) {
           user.money += hand.bet * 2;
           wins++;
@@ -228,20 +228,20 @@ finishRound = function(userDict, game) {
 }
 
 currentPlayerStay = function(userDict, game) {
-  currentPlayer = game.players[game.currentPlayer];
+  var currentPlayer = game.players[game.currentPlayer];
   if(game.betting || game.finished) {
     return false;
   }
   currentPlayer.hands[game.currentPlayerHand].finished = true;
   advanceMove(game);
-  utils.log(game, utils.printPlayer(player) + " stayed.");
+  utils.log(game, utils.printPlayer(currentPlayer) + " stayed.");
   advanceHand(userDict, game);
   return true;
 }
 
 currentPlayerBet = function(userDict, game, amount) {
   currentPlayer = game.players[game.currentPlayer];
-  user = userDict[currentPlayer.playerID];
+  var user = userDict[currentPlayer.playerID];
   if(amount <= 0 || user.money < amount || !game.betting || game.finished) {
     return false;
   }
@@ -249,7 +249,7 @@ currentPlayerBet = function(userDict, game, amount) {
   syncMoney(user, currentPlayer);
   currentPlayer.hands[game.currentPlayerHand].bet = amount;
   advanceMove(game);
-  utils.log(game, utils.printPlayer(player) + " bet $" + amount + ".");
+  utils.log(game, utils.printPlayer(currentPlayer) + " bet $" + amount + ".");
   advanceHand(userDict, game);
   return true;
 }
@@ -265,7 +265,7 @@ currentPlayerHit = function(userDict, game) {
   dealCard(game, hand);
   var totals = handTotals(hand);
   advanceMove(game);
-  utils.log(game, utils.printPlayer(player) + "hit.");
+  utils.log(game, utils.printPlayer(currentPlayer) + "hit.");
   var twentyOne = 21 in totals;
   if(twentyOne || 21 < totals[0]) {
     if(!twentyOne) {
