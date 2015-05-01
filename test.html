@@ -155,7 +155,7 @@
             if (this.status >= 200 && this.status < 400) {
               // Success!
               console.log('Judy Stayed');
-              state(gameData);
+              evanContinue(gameData);
             } else {
               // We reached our target server, but it returned an error
 
@@ -168,7 +168,26 @@
           testRequest.send();
         }
 
+        function evanContinue(gameData) {
+          testRequest = new XMLHttpRequest();
+          testRequest.open( "POST", 'http://localhost:1337/games/'+ gameData.gameID + '/continue.json', true );
+          testRequest.setRequestHeader('X-Auth-Code', evanData.auth);
+          testRequest.onload = function() {
+            if (this.status >= 200 && this.status < 400) {
+              // Success!
+              console.log("continued");
+              state(gameData);
+            } else {
+              // We reached our target server, but it returned an error
 
+            }
+          };
+
+          testRequest.onerror = function() {
+            console.log('Connection Failed');
+          };
+          testRequest.send();
+        }
 
       function state(gameData) {
         testRequest = new XMLHttpRequest();
@@ -190,6 +209,7 @@
         };
         testRequest.send();
       }
+
       //-----------
     </script>
   </head>
