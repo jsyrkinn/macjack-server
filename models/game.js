@@ -3,7 +3,8 @@ var Card = require('./card');
 var Player = require('./player');
 var Hand = require('./hand')
 
-function Game() {
+function Game(gameID) {
+  this.gameID = gameID;
   this.players = [];
   this.deck = [];
   this.joinQueue = [];

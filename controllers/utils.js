@@ -17,6 +17,6 @@ exports.newGame = function(games) {
   do {
     var code = crypto.randomBytes(2).toString('hex');
   } while (games.hasOwnProperty(code));
-  games[code] = new Game();
+  games[code] = new Game(code);
   return code;
 }
