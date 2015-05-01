@@ -76,6 +76,7 @@ startNewRound = function(game) {
 }
 
 checkTimeouts = function(userDict, game) {
+  // TODO only gets called on state requests, consider alternatives.
   if(game.moveNumber == 0) {
     return; // shouldn't start until game starts
   }
