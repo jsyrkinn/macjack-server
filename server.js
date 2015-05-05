@@ -122,7 +122,7 @@ app.post('/games/:gameid/bet.json', function(req, res) {
     if(user) {
       if(controller.hasPlayer(game, user)) {
         if(controller.isPlayerMove(game, user)) {
-          amount = req.query.amount;
+          amount = +req.query.amount;
           if(controller.currentPlayerBet(userDict, game, amount)) {
             res.status(200).send('Bet accepted');
           } else res.status(406).send('Bet denied');
