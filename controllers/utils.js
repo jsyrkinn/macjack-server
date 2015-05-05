@@ -26,5 +26,5 @@ exports.log = function(game, message) {
 }
 
 exports.printPlayer = function(player) {
-  return player.playerName + " (" + player.playerID + ")";
+  return "(" + player.playerID + ") " +player.playerName;
 }
