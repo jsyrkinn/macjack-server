@@ -85,10 +85,11 @@ checkTimeouts = function(userDict, game) {
     if(Date.now() - game.lastMoveTime > 120000) {
       // player timed out on their move
       player = game.players[game.currentPlayer];
-      player.active = false;
+      game.players.splice(game.currentPlayer, 1);
+      game.currentPlayer = game.currentPlayer % game.players.length;
+      game.currentPlayerHand = 0;
       advanceMove(game);
       utils.log(game, utils.printPlayer(player) + " timed out.");
-      advanceHand(userDict, game);
     }
   } else {
     if(Date.now() - game.lastMoveTime > 20000) {
@@ -137,16 +138,13 @@ advanceMove = function(game) {
 }
 
 advanceHand = function(userDict, game) {
-  var originalPlayer = game.currentPlayer;
+  if(game.players.length == 0) {
+    return startNewRound(game);
+  }
   game.currentPlayerHand++
-  while(
-      !game.players[game.currentPlayer].active ||
-      game.currentPlayerHand >= game.players[game.currentPlayer].hands.length) {
+  if(game.currentPlayerHand >= game.players[game.currentPlayer].hands.length) {
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
     game.currentPlayerHand = 0;
-    if(game.currentPlayer == originalPlayer && !game.players[game.currentPlayer].active) {
-      return startNewRound(game);   //all players are inactive
-    }
   }
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
     dealFirstCards(game);
