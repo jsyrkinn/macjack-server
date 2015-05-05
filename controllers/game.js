@@ -82,7 +82,7 @@ checkTimeouts = function(userDict, game) {
     return; // shouldn't start until game starts
   }
   if(!game.finished) {
-    if(Date.now() - game.lastMoveTime > 120000) {
+    if(Date.now() - game.lastMoveTime > 30000) {
       // player timed out on their move
       player = game.players[game.currentPlayer];
       game.players.splice(game.currentPlayer, 1);
@@ -90,6 +90,7 @@ checkTimeouts = function(userDict, game) {
       game.currentPlayerHand = 0;
       advanceMove(game);
       utils.log(game, utils.printPlayer(player) + " timed out.");
+      checkPhases(game);
     }
   } else {
     if(Date.now() - game.lastMoveTime > 20000) {
@@ -132,6 +133,14 @@ isPlayerMove = function(game, user) {
   return game.players[game.currentPlayer].playerID == user.playerID;
 }
 
+checkPhases = function(game) {
+  if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
+    dealFirstCards(game);
+  } else if (!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
+    finishRound(userDict, game);
+  }
+}
+
 advanceMove = function(game) {
   game.moveNumber++
   updateTime(game);
@@ -146,12 +155,7 @@ advanceHand = function(userDict, game) {
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
     game.currentPlayerHand = 0;
   }
-  if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
-    dealFirstCards(game);
-  }
-  if(!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
-    finishRound(userDict, game);
-  }
+  checkPhases(game);
 }
 
 dealFirstCards = function(game) {
@@ -232,6 +236,7 @@ finishRound = function(userDict, game) {
       user.money = 500;
     }
     syncMoney(user, player);
+    utils.log(game, utils.printPlayer(player) + " now has $" + player.money);
     player.active = false; // must send request before timeout to indicate they want to play the next round
   });
   utils.log(game, "Finished - W(" + wins + ") T(" + ties + ") L(" + losses + ").");
