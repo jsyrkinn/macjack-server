@@ -118,7 +118,12 @@ hasPlayer = function(game, user) {
     if(user.playerID == player.playerID) {
       inGame = true;
     }
-  })
+  });
+  game.joinQueue.forEach(function(player) {
+    if(user.playerID == player.playerID) {
+      inGame = true;
+    }
+  });
   return inGame;
 }
 
