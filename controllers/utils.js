@@ -15,7 +15,7 @@ exports.hasID = function(authDict, playerID) {
 
 exports.newGame = function(games) {
   do {
-    var code = crypto.randomBytes(2).toString('hex');
+    var code = Math.floor(Math.random() * 8999 + 1000);
   } while (games.hasOwnProperty(code));
   games[code] = new Game(code);
   return code;
