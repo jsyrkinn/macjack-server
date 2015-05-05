@@ -4,6 +4,8 @@ var Card = require('../models/card');
 var Hand = require('../models/hand');
 var utils = require('./utils');
 
+playerCap = 5;
+
 updateTime = function(game) {
   game.lastMoveTime = Date.now();
 }
@@ -33,7 +35,7 @@ addPlayer = function(game, user) {
   user.inGame = true;
   var player = new Player(user.playerID, user.playerName);
   syncMoney(user, player);
-  if(game.moveNumber == 0) {
+  if(game.moveNumber == 0 && game.players.length < playerCap) {
     game.players.push(player);
     utils.log(game, utils.printPlayer(player) + " joined.");
   } else {
@@ -43,10 +45,9 @@ addPlayer = function(game, user) {
 }
 
 addQueuedPlayers = function(game) {
-  game.joinQueue.forEach(function(player){
-    game.players.push(player);
-  })
-  game.joinQueue = [];
+  while(0 < game.joinQueue.length && game.players.length < playerCap) {
+    game.players.push(game.joinQueue.shift());
+  }
 }
 
 startNewRound = function(game) {
