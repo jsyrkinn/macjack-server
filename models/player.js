@@ -6,7 +6,7 @@ function Player(playerID, playerName) {
   this.hands = [];
   this.hands.push(new Hand());
   this.active = true;
-  this.totalMoney = 0;
+  this.money = 0;
   this.playerID = playerID;
   this.playerName = playerName;
 }
