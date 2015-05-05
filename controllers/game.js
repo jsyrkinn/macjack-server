@@ -225,6 +225,7 @@ finishRound = function(userDict, game) {
     });
     if(user.money == 0) {
       user.numLoses++;
+      user.money = 500;
     }
     syncMoney(user, player);
     player.active = false; // must send request before timeout to indicate they want to play the next round
