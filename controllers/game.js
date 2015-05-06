@@ -280,10 +280,11 @@ currentPlayerHit = function(userDict, game) {
   dealCard(game, hand);
   var totals = handTotals(hand);
   advanceMove(game);
-  utils.log(game, utils.printPlayer(currentPlayer) + " hit.");
+  var busted = 21 < totals[0];
   var twentyOne = -1 < totals.indexOf(21);
-  if(twentyOne || 21 < totals[0]) {
-    if(!twentyOne) {
+  utils.log(game, utils.printPlayer(currentPlayer) + " hit" + (busted ? " (busted)" : "") + ".");
+  if(twentyOne || busted) {
+    if(busted) {
       hand.busted = true;
     }
     hand.finished = true;
