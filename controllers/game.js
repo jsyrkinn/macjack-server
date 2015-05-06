@@ -82,6 +82,7 @@ startNewRound = function(game) {
   game.currentPlayer = 0;
   game.currentPlayerHand = 0;
   game.dealerHand = new Hand();
+  game.lastMoveTime = Date.now();
   utils.log(game, "Started new round.");
 }
 
