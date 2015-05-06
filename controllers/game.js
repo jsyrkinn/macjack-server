@@ -133,7 +133,7 @@ isPlayerMove = function(game, user) {
   return game.players[game.currentPlayer].playerID == user.playerID;
 }
 
-checkPhases = function(game) {
+checkPhases = function(userDict, game) {
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
     dealFirstCards(game);
   } else if (!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
@@ -155,7 +155,7 @@ advanceHand = function(userDict, game) {
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
     game.currentPlayerHand = 0;
   }
-  checkPhases(game);
+  checkPhases(userDict, game);
 }
 
 dealFirstCards = function(game) {
