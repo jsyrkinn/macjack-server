@@ -113,13 +113,19 @@ continueToNextRound = function(game, user) {
   if(!game.finished) {
     return false;
   }
-  //TODO check if player is in game
+  var allPlayersActive = true;
   game.players.forEach(function(player) {
     if(player.playerID == user.playerID) {
       player.active = true;
       utils.log(game, utils.printPlayer(player) + " continued.");
     }
+    if(!player.active) {
+      allPlayersActive = false;
+    }
   });
+  if(allPlayersActive) {
+    startNewRound(game);
+  }
   return true;
 }
 
