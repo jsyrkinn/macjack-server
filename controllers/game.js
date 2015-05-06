@@ -25,6 +25,10 @@ dealCard = function(game, hand) {
 
 syncMoney = function(user, player) {
   if(user.playerID == player.playerID) {
+    if(user.money == 0) {
+      user.numLosses++;
+      user.money = 500;
+    }
     player.money = user.money;
   } else {
     console.log('syncMoney: mismatch');
@@ -234,10 +238,6 @@ finishRound = function(userDict, game) {
         losses++;
       }
     });
-    if(user.money == 0) {
-      user.numLoses++;
-      user.money = 500;
-    }
     syncMoney(user, player);
     utils.log(game, utils.printPlayer(player) + " now has $" + player.money);
     player.active = false; // must send request before timeout to indicate they want to play the next round
