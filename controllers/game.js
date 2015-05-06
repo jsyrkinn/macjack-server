@@ -134,6 +134,9 @@ isPlayerMove = function(game, user) {
 }
 
 checkPhases = function(userDict, game) {
+  if(game.players.length == 0) {
+    return startNewRound(game);
+  }
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
     dealFirstCards(game);
   } else if (!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
