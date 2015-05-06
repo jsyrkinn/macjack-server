@@ -8,9 +8,9 @@ var crypto = require('crypto');
 
 var app = express();
 
-games = {};
-authDict = {};
-userDict = {};
+var games = {};
+var authDict = {};
+var userDict = {};
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
