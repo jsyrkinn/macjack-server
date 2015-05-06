@@ -29,7 +29,7 @@ app.post('/signup.json', function(req, res) {
   authDict[potentialCode] = potentialID;
   var user = new User(potentialID, name);
   userDict[potentialID] = user;
-  console.log("****-*: " + utils.printPlayer(user) + " signed up.");
+  console.log("****-*(*)-*(*): " + utils.printPlayer(user) + " signed up.");
   res.status(200).json({auth: potentialCode, playerID: potentialID}); // response to client
 });
 
