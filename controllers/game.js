@@ -76,6 +76,7 @@ startNewRound = function(game) {
       player.hands = [new Hand()];
     } else {
       game.players.splice(i, 1);
+      utils.log(utils.printPlayer(player) + " didn't continue, kicking.");
     }
   }
   game.currentPlayer = 0;

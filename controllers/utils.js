@@ -22,7 +22,7 @@ exports.newGame = function(games) {
 }
 
 exports.log = function(game, message) {
-  console.log(game.gameID + "-" + game.moveNumber + ": " + message);
+  console.log(game.gameID + "-P(" + game.players.length + ")-M(" + game.moveNumber + "): " + message);
 }
 
 exports.printPlayer = function(player) {
