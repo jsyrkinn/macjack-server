@@ -147,4 +147,5 @@ app.post('/games/:gameid/hit.json', function(req,res) {
   } else res.status(404).send("No such game");
 });
 
+console.log("----Running----");
 app.listen(1337);
