@@ -23,12 +23,15 @@ dealCard = function(game, hand) {
   hand.cards.push(drawCard(game));
 }
 
+loseCheck = function(user) {
+  if(user.money == 0) {
+    user.numLosses++;
+    user.money = 500;
+  }
+}
+
 syncMoney = function(user, player) {
   if(user.playerID == player.playerID) {
-    if(user.money == 0) {
-      user.numLosses++;
-      user.money = 500;
-    }
     player.money = user.money;
   } else {
     console.log('syncMoney: mismatch');
@@ -38,6 +41,7 @@ syncMoney = function(user, player) {
 addPlayer = function(game, user) {
   user.inGame = true;
   var player = new Player(user.playerID, user.playerName);
+  loseCheck(user);
   syncMoney(user, player);
   if(game.moveNumber == 0 && game.players.length < playerCap) {
     game.players.push(player);
@@ -238,6 +242,7 @@ finishRound = function(userDict, game) {
         losses++;
       }
     });
+    loseCheck(user);
     syncMoney(user, player);
     utils.log(game, utils.printPlayer(player) + " now has $" + player.money);
     player.active = false; // must send request before timeout to indicate they want to play the next round
