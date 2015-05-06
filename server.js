@@ -30,7 +30,7 @@ app.post('/signup.json', function(req, res) {
   var user = new User(potentialID, name);
   userDict[potentialID] = user;
   console.log("****-*(*)-*(*): " + utils.printPlayer(user) + " signed up.");
-  res.status(200).json({auth: potentialCode, playerID: potentialID}); // response to client
+  return res.status(200).json({auth: potentialCode, playerID: potentialID}); // response to client
 });
 
 app.get('/games/:gameid/state.json', function(req, res) {
@@ -47,7 +47,7 @@ app.get('/games/:gameid/state.json', function(req, res) {
   }
   if(controller.hasPlayer(game, userDict[auth])) {
     controller.checkTimeouts(userDict, game);
-    res.json(game);
+    return res.status(200).json(game);
   } else {
     return res.status(401).send("Player not in game");
   }
@@ -64,8 +64,7 @@ app.post('/games/newgame.json', function(req, res) {
   utils.log(game, "Created.");
   controller.addPlayer(game, user);
   controller.startNewRound(game);
-  res.status(200).json({gameID: gameCode});
-
+  return res.status(200).json({gameID: gameCode});
 });
 
 app.post('/games/:gameid/join.json', function(req, res) {
@@ -97,9 +96,9 @@ app.post('/games/:gameid/continue.json', function(req, res) {
   }
   var user = userDict[auth];
   if(controller.continueToNextRound(game, user)) {
-    res.status(200).send("Continued");
+    return res.status(200).send("Continued");
   } else {
-    res.status(403).send("Game not finished");
+    return res.status(403).send("Game not finished");
   }
 });
 
@@ -140,7 +139,7 @@ app.post('/games/:gameid/bet.json', function(req, res) {
     return res.status(404).send("Player not in game");
   }
   if(!controller.isPlayerMove(game, user)) {
-    res.status(401).send("Not your move");
+    return res.status(401).send("Not your move");
   }
   amount = +req.query.amount;
   if(controller.currentPlayerBet(userDict, game, amount)) {
