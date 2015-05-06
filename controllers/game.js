@@ -90,7 +90,7 @@ checkTimeouts = function(userDict, game) {
       game.currentPlayerHand = 0;
       advanceMove(game);
       utils.log(game, utils.printPlayer(player) + " timed out.");
-      checkPhases(game);
+      checkPhases(userDict, game);
     }
   } else {
     if(Date.now() - game.lastMoveTime > 20000) {
