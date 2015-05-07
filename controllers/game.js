@@ -4,7 +4,7 @@ var Card = require('../models/card');
 var Hand = require('../models/hand');
 var utils = require('./utils');
 
-playerCap = 5;
+playerCap = 3;
 
 updateTime = function(game) {
   game.lastMoveTime = Date.now();
