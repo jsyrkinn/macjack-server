@@ -88,12 +88,12 @@ startNewRound = function(game) {
 
 checkTimeouts = function(userDict, game) {
   // TODO only gets called on state requests, consider alternatives.
-  playerTimeoutTime = 300000;
+  var playerTimeoutTime = 300000;
   if(game.moveNumber == 0) {
     playerTimeoutTime *= 10; //player has ten times longer to move if the game hasn't started yet
   }
   if(!game.finished) {
-    if(Date.now() - game.lastMoveTime > playerTimeoutTime) {
+    if((Date.now() - game.lastMoveTime) > playerTimeoutTime) {
       // player timed out on their move
       player = game.players[game.currentPlayer];
       game.players.splice(game.currentPlayer, 1);
@@ -104,7 +104,7 @@ checkTimeouts = function(userDict, game) {
       checkPhases(userDict, game);
     }
   } else {
-    if(Date.now() - game.lastMoveTime > 300000) {
+    if((Date.now() - game.lastMoveTime) > 300000) {
       // all inactive players removed and new game started
       startNewRound(game);
     }
