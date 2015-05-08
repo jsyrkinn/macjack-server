@@ -1,3 +1,4 @@
+#!/bin/env node
 
 var express = require('express');
 var Game = require('./models/game');
@@ -98,7 +99,7 @@ app.post('/games/:gameid/continue.json', function(req, res) {
   if(controller.continueToNextRound(game, user)) {
     return res.status(200).send("Continued");
   } else {
-    return res.status(403).send("Game not finished"); 
+    return res.status(403).send("Game not finished");
   }
 });
 
@@ -172,5 +173,16 @@ app.post('/games/:gameid/hit.json', function(req,res) {
   }
 });
 
+
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+if (typeof ipaddress === "undefined") {
+    //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
+    //  allows us to run/test the app locally.
+    console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
+    ipaddress = "127.0.0.1";
+};
+
 console.log("----Running----");
-app.listen(1337);
+app.listen(port, ipaddress);
