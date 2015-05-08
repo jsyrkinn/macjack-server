@@ -81,7 +81,7 @@ app.post('/games/:gameid/join.json', function(req, res) {
     controller.addPlayer(game, user);
     return res.status(200).send();
   } else {
-    return res.status(403).send("Already in game");
+    return res.status(202).send("Already in game");
   }
 });
 
@@ -98,7 +98,7 @@ app.post('/games/:gameid/continue.json', function(req, res) {
   if(controller.continueToNextRound(game, user)) {
     return res.status(200).send("Continued");
   } else {
-    return res.status(403).send("Game not finished");
+    return res.status(403).send("Game not finished"); 
   }
 });
 
