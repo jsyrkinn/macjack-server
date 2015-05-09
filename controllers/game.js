@@ -19,7 +19,6 @@ drawCard = function(game) {
 }
 
 dealCard = function(game, hand) {
-  //TODO make game handle running out of cards
   hand.cards.push(drawCard(game));
 }
 
@@ -74,7 +73,7 @@ startNewRound = function(game) {
     var player = game.players[i];
     if(player.active) {
       player.hands = [new Hand()];
-    } else {
+    } else { //kick player because they didn't continue
       game.players.splice(i, 1);
       utils.log(game, utils.printPlayer(player) + " didn't continue, kicking.");
     }
@@ -87,7 +86,7 @@ startNewRound = function(game) {
 }
 
 checkTimeouts = function(userDict, game) {
-  // TODO only gets called on state requests, consider alternatives.
+  // Only gets called on state requests, may cause unexecpected behavior if no one is polling game.
   var playerTimeoutTime = 300000;
   if(game.moveNumber == 0) {
     playerTimeoutTime *= 10; //player has ten times longer to move if the game hasn't started yet
@@ -126,6 +125,7 @@ continueToNextRound = function(game, user) {
     }
   });
   if(allPlayersActive) {
+    // all players have continued, start new round immediately
     startNewRound(game);
   }
   return true;
@@ -152,11 +152,14 @@ isPlayerMove = function(game, user) {
 
 checkPhases = function(userDict, game) {
   if(game.players.length == 0) {
+    //if all players left, start game over
     return startNewRound(game);
   }
   if(game.betting && game.players[game.currentPlayer].hands[game.currentPlayerHand].bet > 0) {
+    //if bet is nonzero, that means the server has looped back to the first hand, and needs to move onto card dealing
     dealFirstCards(game);
   } else if (!game.finished && game.players[game.currentPlayer].hands[game.currentPlayerHand].finished) {
+    //if hand is finshed, then the server has reached the end of the card phase and must process the end game
     finishRound(userDict, game);
   }
 }
@@ -170,6 +173,7 @@ advanceHand = function(userDict, game) {
   if(game.players.length == 0) {
     return startNewRound(game);
   }
+  // future proofed function meant to handle players having mutliple hands after a split. UNTESTED
   game.currentPlayerHand++
   if(game.currentPlayerHand >= game.players[game.currentPlayer].hands.length) {
     game.currentPlayer = (game.currentPlayer + 1) % game.players.length;
@@ -248,13 +252,14 @@ finishRound = function(userDict, game) {
           losses++;
         }
       } else {
+        // player busted
         losses++;
       }
     });
     loseCheck(user);
     syncMoney(user, player);
     utils.log(game, utils.printPlayer(player) + " now has $" + player.money);
-    player.active = false; // must send request before timeout to indicate they want to play the next round
+    player.active = false; // must send continue request before timeout to indicate they want to play the next round
   });
   utils.log(game, "Finished - W(" + wins + ") T(" + ties + ") L(" + losses + ").");
 }
@@ -289,6 +294,7 @@ currentPlayerBet = function(userDict, game, amount) {
 currentPlayerHit = function(userDict, game) {
   var currentPlayer = game.players[game.currentPlayer];
   var hand = currentPlayer.hands[game.currentPlayerHand];
+  // checks if player has 21 on first deal (blackjack), in which case they should not be able to hit
   var preTotals = handTotals(hand);
   var blackJack = -1 < preTotals.indexOf(21);
   if(game.betting || game.finished || blackJack) {
@@ -304,6 +310,7 @@ currentPlayerHit = function(userDict, game) {
     if(busted) {
       hand.busted = true;
     }
+    //if player got 21 or they busted, automatically move on
     hand.finished = true;
     advanceHand(userDict, game);
   }
