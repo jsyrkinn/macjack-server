@@ -193,24 +193,17 @@ dealFirstCards = function(game) {
 }
 
 handTotals = function(hand) {
-  var totals = [];
-  totals[0] = 0;
-  for (var i = 0; i < hand.cards.length; i++ ) {
-    var card = hand.cards[i];
-    var totLength = totals.length;
-    for(var b = 0; b < totLength; b++){
-      if (card.rank != 1 && card.rank <= 10) {
-          totals[b] += card.rank;
-      }
-      else if (card.rank > 10){
-          totals[b] += 10;
-      }
-      else {
-          totals.push(totals[b] + 11);
-          totals[b]+=1;
+  totals = [0];
+  hand.cards.forEach(function(card) {
+    len = totals.length;
+    value = card.rank < 10 ? card.rank : 10;
+    for(i=0; i < len; ++i) {
+      totals[i] += value;
+      if(value == 1) {
+        totals.push(totals[i] + 10);
       }
     }
-  }
+  });
   return totals.sort();
 }
 
