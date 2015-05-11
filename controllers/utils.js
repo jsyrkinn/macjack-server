@@ -34,7 +34,7 @@ exports.pruneInactiveGames = function(games) {
   currentTime = Date.now();
   for(var game in games) {
     if(games.hasOwnProperty(game)) {
-      if(currentTime - games[game].lastMoveTime > 30000) {
+      if(currentTime - games[game].lastMoveTime > 120 * 60000) {
         log(games[game], "Deleting due to inactivity.")
         delete games[game];
       }
