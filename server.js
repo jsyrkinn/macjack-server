@@ -177,7 +177,7 @@ app.post('/games/:gameid/hit.json', function(req,res) {
 
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-var port = process.env.OPENSHIFT_NODEJS_PORT || 80;
+var port = process.env.OPENSHIFT_NODEJS_PORT || 80; // depending on network config, you may have to change port on server and client when testing.
 
 if (typeof ipaddress === "undefined") {
     //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
