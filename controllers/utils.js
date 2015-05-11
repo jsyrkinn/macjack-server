@@ -21,10 +21,23 @@ exports.newGame = function(games) {
   return code;
 }
 
-exports.log = function(game, message) {
+log = function(game, message) {
   console.log(game.gameID + "-P(" + game.players.length + ")-M(" + game.moveNumber + "): " + message);
 }
+exports.log = log;
 
 exports.printPlayer = function(player) {
   return "(" + player.playerID + ") " +player.playerName;
+}
+
+exports.pruneInactiveGames = function(games) {
+  currentTime = Date.now();
+  for(var game in games) {
+    if(games.hasOwnProperty(game)) {
+      if(currentTime - games[game].lastMoveTime > 30000) {
+        log(games[game], "Deleting due to inactivity.")
+        delete games[game];
+      }
+    }
+  }
 }

@@ -35,6 +35,7 @@ app.post('/signup.json', function(req, res) {
 });
 
 app.get('/games/:gameid/state.json', function(req, res) {
+  utils.pruneInactiveGames(games); // HACK - change later
   var game = games[req.params.gameid];
   if(!game) {
     return res.status(404).send("Game not found");
