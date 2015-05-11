@@ -13,6 +13,8 @@ var games = {};
 var authDict = {};
 var userDict = {};
 
+var pruneIntervalID = setInterval(utils.pruneInactiveGames, 120000, games) // check for inactive games every 2 minutes
+
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-auth-code");
@@ -35,7 +37,6 @@ app.post('/signup.json', function(req, res) {
 });
 
 app.get('/games/:gameid/state.json', function(req, res) {
-  utils.pruneInactiveGames(games); // HACK - change later
   var game = games[req.params.gameid];
   if(!game) {
     return res.status(404).send("Game not found");
